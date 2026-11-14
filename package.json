@@ -11,7 +11,6 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
     "alpinejs": "^3.14.0",
-    "papicons": "^1.0.0",
     "chart.js": "^4.4.0",
     "posthog-js": "^1.0.0"
   },
