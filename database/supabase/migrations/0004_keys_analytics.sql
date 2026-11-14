@@ -1,4 +1,4 @@
--- Vesper — Migration 0004 : Clés de chiffrement, analytics UX, ML, rapports, index
+-- Vesper — Migration 0004 : Clés de chiffrement, insights ML, rapports, index
 
 create table if not exists public.encryption_keys (
     profile_id  uuid primary key references public.profiles (id) on delete cascade,
@@ -15,33 +15,6 @@ create table if not exists public.household_keys (
     wrapped_dek  text not null,
     primary key (household_id, profile_id),
     created_at   timestamptz not null default now()
-);
-
-create table if not exists public.ux_sessions (
-    id               uuid primary key default gen_random_uuid(),
-    profile_id       uuid references public.profiles (id) on delete cascade,
-    device           text,
-    os               text,
-    browser          text,
-    screen_width     int,
-    screen_height    int,
-    started_at       timestamptz not null default now(),
-    ended_at         timestamptz,
-    duration_seconds int
-);
-
-create table if not exists public.ux_analytics_events (
-    id          bigint generated always as identity primary key,
-    profile_id  uuid references public.profiles (id) on delete cascade,
-    session_id  uuid references public.ux_sessions (id) on delete cascade,
-    event_type  text not null,
-    page        text not null,
-    component   text,
-    element_id  text,
-    metadata    jsonb,
-    client_ts   timestamptz not null,
-    server_ts   timestamptz not null default now(),
-    ip_hash     text
 );
 
 create table if not exists public.ml_insights (
@@ -71,9 +44,5 @@ create index if not exists idx_transactions_profile_date
     on public.transactions (profile_id, occurred_at desc);
 create index if not exists idx_legs_transaction
     on public.transaction_legs (transaction_id);
-create index if not exists idx_ux_events_session
-    on public.ux_analytics_events (session_id, server_ts desc);
-create index if not exists idx_ux_events_profile_ts
-    on public.ux_analytics_events (profile_id, server_ts desc);
 create index if not exists idx_fx_pair
     on public.exchange_rates (base_currency, quote_currency, as_of desc);

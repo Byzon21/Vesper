@@ -6,7 +6,7 @@
 import Alpine from 'alpinejs';
 
 import './theme';
-import './analytics/tracker';
+import './posthog';
 import './pwa/register';
 
 window.Alpine = Alpine;

@@ -5,8 +5,6 @@ alter table public.budgets             enable row level security;
 alter table public.savings_goals       enable row level security;
 alter table public.encryption_keys     enable row level security;
 alter table public.household_keys      enable row level security;
-alter table public.ux_sessions         enable row level security;
-alter table public.ux_analytics_events enable row level security;
 alter table public.ml_insights         enable row level security;
 alter table public.reports             enable row level security;
 
@@ -46,15 +44,6 @@ create policy p_dek_update on public.encryption_keys for update using (profile_i
 -- ------------------------------------------------------------ household_keys
 create policy p_hdek_select on public.household_keys for select using (profile_id = auth.uid());
 create policy p_hdek_insert on public.household_keys for insert with check (profile_id = auth.uid());
-
--- -------------------------------------------------------------- ux_sessions
-create policy p_ux_session_select on public.ux_sessions for select using (profile_id = auth.uid());
-create policy p_ux_session_insert on public.ux_sessions for insert with check (profile_id = auth.uid());
-create policy p_ux_session_update on public.ux_sessions for update using (profile_id = auth.uid());
-
--- ------------------------------------------------------- ux_analytics_events
-create policy p_ux_event_select on public.ux_analytics_events for select using (profile_id = auth.uid());
-create policy p_ux_event_insert on public.ux_analytics_events for insert with check (profile_id = auth.uid());
 
 -- ------------------------------------------------------------- ml_insights
 create policy p_ml_select on public.ml_insights for select using (

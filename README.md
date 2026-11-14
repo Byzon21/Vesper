@@ -26,6 +26,7 @@ Vesper est conçue selon une **architecture en couches strictes (Zero Trust)** o
 - **Icônes** : `papicons` (sprite SVG via composant `<x-icon>`)
 - **Base de données** : Supabase (PostgreSQL + RLS + Storage + Auth)
 - **Auth** : Google OAuth/OIDC via Supabase Auth → session Laravel chiffrée
+- **Analytics** : PostHog (autocapture, session replay, rage clicks, événements serveur)
 - **ML** : Rubix ML (classifieur k-NN) + prévisions maison (prédictif)
 - **PDF** : DOMPDF (rapports financiers)
 
@@ -34,15 +35,15 @@ Vesper est conçue selon une **architecture en couches strictes (Zero Trust)** o
 ```
 app/
 ├── Domain/
-│   ├── Analytics/       # Événements UX (enum, VO, service)
 │   └── Currency/        # Money, ExchangeRate, BiMonetaryService (RDC)
 ├── Http/
-│   ├── Controllers/     # AuthController, AnalyticsController
+│   ├── Controllers/     # AuthController
 │   └── Middleware/      # SecurityHeaders, BotDetection, HMAC, RateLimiter…
 ├── Livewire/            # Pages (Dashboard, Transactions, Couple, Reports, Settings)
 ├── ML/                  # SpendingClassifier, SpendingForecaster, InsightGenerator
-├── Providers/           # SecurityServiceProvider (bindings)
+├── Providers/           # AppServiceProvider, SecurityServiceProvider (bindings)
 ├── Services/
+│   ├── Analytics/       # PostHogService (événements serveur)
 │   ├── Reporting/       # PdfReportGenerator
 │   └── Supabase/        # SupabaseClient, SupabaseJwtVerifier
 └── Support/Security/
@@ -51,7 +52,7 @@ app/
     └── RequestIntegrity/# HmacSigner
 database/supabase/migrations/  # 0001..0008 (schéma, RLS, devises)
 resources/
-├── js/                  # app.js, theme.js, analytics/tracker.js, pwa/
+├── js/                  # app.js, theme.js, posthog.js, pwa/
 ├── lang/                # en, fr, es, pt (JSON)
 └── views/               # layouts, components (icon, bottom-nav), livewire
 docs/                    # architecture, sécurité, BDD, multi-devises, analytics
@@ -78,14 +79,21 @@ php artisan serve
 
 ## 📦 Déploiement GitHub
 
-Le projet est prêt pour un transfert progressif vers GitHub. Le CLI `gh` n'étant pas installé, créez le dépôt puis poussez :
+Le CLI `gh` (v2.104.0) est installé. Authentifiez-vous puis créez/poussez le dépôt :
 
 ```bash
-# 1. Créer le dépôt sur github.com (nom : Vesper, par ex. Byzon21/Vesper)
-# 2. Lier et pousser
-git remote add origin https://github.com/Byzon21/Vesper.git
-git push -u origin main
+# 1. Authentification (flux navigateur : GitHub.com → HTTPS)
+gh auth login
+
+# 2. Créer le dépôt ET pousser en une commande
+gh repo create Vesper --public --source=. --remote=origin --push
+
+# Alternative si le dépôt existe déjà :
+# git remote add origin https://github.com/Byzon21/Vesper.git
+# git push -u origin main
 ```
+
+> ℹ️ Après l'installation, si `gh` n'est pas reconnu dans un terminal déjà ouvert, fermez-le et rouvrez-le (le PATH est actualisé au démarrage d'une nouvelle session).
 
 ---
 

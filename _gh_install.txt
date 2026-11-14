@@ -1,0 +1,12 @@
+﻿La source 'msstore' n├®cessite que vous consultiez les contrats suivants avant de lÔÇÖutiliser.
+Terms of Transaction: https://aka.ms/microsoft-store-terms-of-transaction
+La source n├®cessite que la r├®gion g├®ographique ├á 2 lettres de lÔÇÖordinateur actuel soit envoy├®e au service principal pour fonctionner correctement (par exemple, ┬½ ├ëTATS-UNIS ┬╗).
+
+Trouv├® GitHub CLI [GitHub.cli] Version 2.104.0
+La licence dÔÇÖutilisation de cette application vous est octroy├®e par son propri├®taire.
+Microsoft nÔÇÖest pas responsable des paquets tiers et nÔÇÖaccorde pas de licences ├á ceux-ci.
+T├®l├®chargement en cours https://github.com/cli/cli/releases/download/v2.104.0/gh_2.104.0_windows_amd64.msi
+Le code de hachage de lÔÇÖinstallation a ├®t├® v├®rifi├® avec succ├¿s
+D├®marrage du package dÔÇÖinstallation... Merci de patienter.
+Install├® correctement
+

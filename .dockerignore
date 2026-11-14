@@ -1,0 +1,17 @@
+# Vesper — .dockerignore (rien de sensible dans l'image)
+.git
+.env
+.env.*
+vendor
+node_modules
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/secure/*
+public/build
+Dockerfile
+.dockerignore
+*.md
+docs
+tests

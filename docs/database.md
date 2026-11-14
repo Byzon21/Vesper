@@ -9,9 +9,9 @@ Schéma PostgreSQL géré par Supabase, avec **Row Level Security** partout (ref
 | `0001` | Extensions (`pgcrypto`), trigger `handle_new_user`, helpers `is_household_member`, `household_role` |
 | `0002` | `profiles`, `households`, `household_members`, `currencies`, `exchange_rates`, `categories` |
 | `0003` | `transactions`, `transaction_legs`, `budgets`, `savings_goals` |
-| `0004` | `encryption_keys`, `household_keys`, `ux_sessions`, `ux_analytics_events`, `ml_insights`, `reports` + index |
+| `0004` | `encryption_keys`, `household_keys`, `ml_insights`, `reports` + index |
 | `0005` | RLS (1/2) : profils, foyer, devises, catégories, transactions, jambes |
-| `0006` | RLS (2/2) : budgets, épargne, clés, analytics, insights, rapports |
+| `0006` | RLS (2/2) : budgets, épargne, clés, insights, rapports |
 | `0007` | Devises — Afrique (CDF, XAF, XOF, LSL, NAD, ZWG…) |
 | `0008` | Devises — Monde (USD, EUR, JPY, …) |
 
@@ -41,6 +41,6 @@ transactions ─N:1─ categories
 - `transaction_legs` : accès via `can_access_transaction()` (security definer), modification réservée au créateur (`is_transaction_creator()`).
 - `exchange_rates` : taux globaux lisibles ; taux manuels visibles/modifiables par leur propriétaire.
 - `encryption_keys` / `household_keys` : uniquement sa propre enveloppe (`profile_id = auth.uid()`).
-- `ux_*`, `ml_insights`, `reports` : son propre profil ou foyer.
+- `ml_insights`, `reports` : son propre profil ou foyer.
 
 Les fonctions `security definer` (`is_household_member`, `can_access_transaction`, …) évitent toute récursion RLS tout en restant liées à `auth.uid()`.

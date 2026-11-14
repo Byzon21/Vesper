@@ -12,7 +12,6 @@
 /storage/*.key
 npm-debug.log
 yarn-error.log
-composer.lock
 
 # --- Secrets & environnement (JAMAIS versionnés) ---
 .env

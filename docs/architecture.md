@@ -11,11 +11,11 @@ L'application est structurée en **4 couches** où chaque couche ne peut dépend
 │    → aucun secret, aucune logique métier sensible           │
 ├─────────────────────────────────────────────────────────────┤
 │ 2. APPLICATION (Use Cases / Controllers / Middleware)       │
-│    AuthController, AnalyticsController, Livewire Components │
+│    AuthController, PostHogService, Livewire Components      │
 │    → orchestration, validation, sessions                    │
 ├─────────────────────────────────────────────────────────────┤
 │ 3. DOMAINE (logique métier pure — OOP / SOLID)              │
-│    Currency (Money, BiMonetaryService), Analytics (UxEvent) │
+│    Currency (Money, BiMonetaryService)                      │
 │    → Value Objects immuables, interfaces (repositories)     │
 ├─────────────────────────────────────────────────────────────┤
 │ 4. INFRASTRUCTURE (données & sécurité)                      │
