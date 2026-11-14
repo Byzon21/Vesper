@@ -4,6 +4,12 @@
 -- PostgreSQL 15+ (Supabase). Toutes les tables vivent dans le schÃ©ma `public`.
 -- ============================================================================
 
+-- Autoriser la crÃ©ation de fonctions SQL qui rÃ©fÃ©rencent des tables crÃ©Ã©es
+-- plus tard dans le script (ex: is_household_member â†’ household_members).
+-- Sans ceci, PostgreSQL valide le corps des fonctions `language sql` dÃ¨s la
+-- crÃ©ation et Ã©choue sur les tables pas encore crÃ©Ã©es.
+set check_function_bodies = off;
+
 -- UUID v4 natifs + gÃ©nÃ©ration d'octets alÃ©atoires (nonces/sels cÃ´tÃ© SQL).
 create extension if not exists pgcrypto;
 
