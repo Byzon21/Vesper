@@ -44,7 +44,7 @@ final class SupabaseClient
 
     public function asService(): self
     {
-        $this->authorization = 'Bearer ' . $this->vault->resolve('vesper/supabase/service_role_key')->reveal();
+        $this->authorization = 'Bearer ' . $this->serviceRoleKey();
 
         return $this;
     }
@@ -120,6 +120,26 @@ final class SupabaseClient
 
     private function anonKey(): string
     {
-        return $this->vault->resolve('vesper/supabase/anon_key')->reveal();
+        $envKey = (string) config('supabase.anon_key', '');
+
+        if ($envKey !== '') {
+            return $envKey;
+        }
+
+        return $this->vault->resolve((string) config('supabase.vault_paths.anon_key'))->reveal();
+    }
+
+    /**
+     * Clé service_role (bypass RLS) — env en DEV, Vault en production.
+     */
+    private function serviceRoleKey(): string
+    {
+        $envKey = (string) config('supabase.service_role_key', '');
+
+        if ($envKey !== '') {
+            return $envKey;
+        }
+
+        return $this->vault->resolve((string) config('supabase.vault_paths.service_role_key'))->reveal();
     }
 }
