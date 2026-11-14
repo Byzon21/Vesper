@@ -23,5 +23,11 @@
                 <option value="CDF">CDF — FC</option>
             </select>
         </div>
+
+        <div class="border-t border-slate-200 pt-4 dark:border-slate-800">
+            <button type="button" onclick="window.signOut()" class="btn-ghost w-full text-red-600">
+                Déconnexion
+            </button>
+        </div>
     </div>
 </div>

@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#0f172a" id="theme-color-meta">
     <meta name="description" content="Vesper — Gestion de dépenses personnelles et de couple, ultra-sécurisée.">
-    <meta name="vesper-user" content="{{ auth()->check() ? auth()->id() : '' }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="vesper-user" content="{{ session('supabase_user_id', '') }}">
 
     <title>{{ $title ?? __('app.name') }} — Vesper</title>
 

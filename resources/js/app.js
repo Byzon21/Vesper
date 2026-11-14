@@ -7,6 +7,8 @@ import Alpine from 'alpinejs';
 
 import './theme';
 import './posthog';
+import './supabase';
+import './auth';
 import './pwa/register';
 
 window.Alpine = Alpine;

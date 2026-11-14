@@ -46,17 +46,25 @@ final class AuthController extends Controller
         $request->session()->regenerate();
 
         $request->session()->put('supabase_user_id', $user->id);
+        $request->session()->put('supabase_email', $user->email);
         $request->session()->put('supabase_access_token', $token); // cookie chiffré (SESSION_ENCRYPT=true)
-
-        // Authentifie l'utilisateur pour le middleware 'auth'.
-        // (Nécessite un UserProvider local mappant auth.users → profil, ou
-        //  un guard personnalisé lisant supabase_user_id en session.)
-        auth()->loginUsingId($user->id);
 
         return response()->json([
             'status' => 'ok',
             'user_id' => $user->id,
         ]);
+    }
+
+    /**
+     * Déconnexion : invalide la session serveur (le jeton Supabase est
+     * révoqué côté client avant cet appel).
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['status' => 'ok']);
     }
 
     /**
