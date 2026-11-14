@@ -17,6 +17,7 @@ return [
     'enabled' => (bool) env('POSTHOG_ENABLED', true),
     'host' => env('POSTHOG_HOST', 'https://us.i.posthog.com'),
     'project_token' => env('POSTHOG_PROJECT_TOKEN'),
+    'personal_api_key' => env('POSTHOG_PERSONAL_API_KEY'),
     'personal_key_vault' => env('POSTHOG_PERSONAL_KEY_VAULT', 'vesper/posthog/personal_api_key'),
 
 ];
