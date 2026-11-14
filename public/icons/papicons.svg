@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!-- ======================================================================
+       Sprite papicons — Vesper
+       ⚠️  Les <symbol> ci-dessous sont des EXEMPLES de structure. Ils doivent
+           être remplacés/générés par la bibliothèque officielle papicons
+           (https://papicons.com) via son outillage de build, afin de disposer
+           de l'intégralité des icônes (outline / solid / duotone).
+       ====================================================================== -->
+  <symbol id="icon-home" viewBox="0 0 24 24">
+    <path d="M3 10.5 12 3l9 7.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M5 9.5V21h14V9.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icon-wallet" viewBox="0 0 24 24">
+    <rect x="3" y="6" width="18" height="14" rx="2" stroke-linejoin="round"/>
+    <path d="M3 9h18M16 14h2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icon-tag" viewBox="0 0 24 24">
+    <path d="M3 3h8l10 10-8 8L3 11V3Z" stroke-linejoin="round"/>
+    <circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none"/>
+  </symbol>
+  <symbol id="icon-chart" viewBox="0 0 24 24">
+    <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icon-couple" viewBox="0 0 24 24">
+    <circle cx="9" cy="8" r="3"/>
+    <circle cx="17" cy="9" r="2.5"/>
+    <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 15c3 0 5 2 5 4.5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icon-settings" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a7 7 0 0 0-1.7-1L14.5 3h-5l-.3 2.6a7 7 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .3 0 .7.1 1l-2 1.5 2 3.4 2.4-1c.5.4 1.1.8 1.7 1l.3 2.6h5l.3-2.6c.6-.2 1.2-.6 1.7-1l2.4 1 2-3.4-2-1.5c.1-.3.1-.7.1-1Z" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icon-report" viewBox="0 0 24 24">
+    <path d="M6 3h9l4 4v14H6V3Z" stroke-linejoin="round"/>
+    <path d="M15 3v4h4M9 12h6M9 16h6" stroke-linecap="round"/>
+  </symbol>
+</svg>

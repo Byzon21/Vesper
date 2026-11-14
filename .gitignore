@@ -1,0 +1,57 @@
+# ==========================================================================
+# Vesper — .gitignore
+# Aucun secret, aucune donnée sensible, aucun artefact de build ne doit
+# être versionné. La sécurité prime sur tout.
+# ==========================================================================
+
+# --- Dépendances / builds ---
+/vendor
+/node_modules
+/public/build
+/public/hot
+/storage/*.key
+npm-debug.log
+yarn-error.log
+composer.lock
+
+# --- Secrets & environnement (JAMAIS versionnés) ---
+.env
+.env.*
+!.env.example
+config/vault/*.json
+*.pem
+*.key
+*.crt
+secrets/
+vault/
+credentials.json
+service-account*.json
+
+# --- Fichiers système / IDE ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.sublime-*
+*.code-workspace
+
+# --- PHPUnit / cache / logs ---
+.phpunit.result.cache
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/app/private/*
+/storage/app/public/*
+!storage/app/public/.gitignore
+bootstrap/cache/*.php
+
+# --- Tmp / debug ---
+*.log
+.env.backup
+.env.production
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

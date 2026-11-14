@@ -1,0 +1,79 @@
+-- Vesper — Migration 0004 : Clés de chiffrement, analytics UX, ML, rapports, index
+
+create table if not exists public.encryption_keys (
+    profile_id  uuid primary key references public.profiles (id) on delete cascade,
+    wrapped_dek text not null,
+    kek_context text not null default 'user',
+    algorithm   text not null default 'aes-256-gcm',
+    created_at  timestamptz not null default now(),
+    updated_at  timestamptz not null default now()
+);
+
+create table if not exists public.household_keys (
+    household_id uuid not null references public.households (id) on delete cascade,
+    profile_id   uuid not null references public.profiles (id) on delete cascade,
+    wrapped_dek  text not null,
+    primary key (household_id, profile_id),
+    created_at   timestamptz not null default now()
+);
+
+create table if not exists public.ux_sessions (
+    id               uuid primary key default gen_random_uuid(),
+    profile_id       uuid references public.profiles (id) on delete cascade,
+    device           text,
+    os               text,
+    browser          text,
+    screen_width     int,
+    screen_height    int,
+    started_at       timestamptz not null default now(),
+    ended_at         timestamptz,
+    duration_seconds int
+);
+
+create table if not exists public.ux_analytics_events (
+    id          bigint generated always as identity primary key,
+    profile_id  uuid references public.profiles (id) on delete cascade,
+    session_id  uuid references public.ux_sessions (id) on delete cascade,
+    event_type  text not null,
+    page        text not null,
+    component   text,
+    element_id  text,
+    metadata    jsonb,
+    client_ts   timestamptz not null,
+    server_ts   timestamptz not null default now(),
+    ip_hash     text
+);
+
+create table if not exists public.ml_insights (
+    id                 uuid primary key default gen_random_uuid(),
+    household_id       uuid references public.households (id) on delete cascade,
+    profile_id         uuid references public.profiles (id) on delete cascade,
+    model_version      text not null,
+    insight_type       text not null,
+    payload_ciphertext text not null,
+    period             text,
+    created_at         timestamptz not null default now()
+);
+
+create table if not exists public.reports (
+    id           uuid primary key default gen_random_uuid(),
+    household_id uuid references public.households (id) on delete cascade,
+    profile_id   uuid not null references public.profiles (id),
+    kind         text not null,
+    period       text,
+    storage_path text not null,
+    generated_at timestamptz not null default now()
+);
+
+create index if not exists idx_transactions_household_date
+    on public.transactions (household_id, occurred_at desc);
+create index if not exists idx_transactions_profile_date
+    on public.transactions (profile_id, occurred_at desc);
+create index if not exists idx_legs_transaction
+    on public.transaction_legs (transaction_id);
+create index if not exists idx_ux_events_session
+    on public.ux_analytics_events (session_id, server_ts desc);
+create index if not exists idx_ux_events_profile_ts
+    on public.ux_analytics_events (profile_id, server_ts desc);
+create index if not exists idx_fx_pair
+    on public.exchange_rates (base_currency, quote_currency, as_of desc);
