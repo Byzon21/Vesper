@@ -70,6 +70,13 @@ final class AuthController extends Controller
      */
     public function confirmEmail(Request $request): JsonResponse
     {
+        // Inscription instantanée par défaut. Mettre AUTH_AUTO_CONFIRM=false
+        // pour exiger la confirmation d'email (nécessite un SMTP configuré côté
+        // Supabase, ex. Resend).
+        if (! (bool) env('AUTH_AUTO_CONFIRM', true)) {
+            return response()->json(['status' => 'disabled'], 403);
+        }
+
         $userId = (string) $request->input('user_id', '');
 
         if ($userId === '' || ! preg_match('/^[0-9a-f-]{36}$/i', $userId)) {
