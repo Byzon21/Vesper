@@ -42,12 +42,17 @@ final class AuthController extends Controller
 
         $this->provisionKeys($user->id);
 
+        // Récupère l'état de l'abonnement (essai / premium) depuis Supabase.
+        $subscription = $this->fetchSubscription($user->id, $token);
+
         // Anti-fixation de session.
         $request->session()->regenerate();
 
         $request->session()->put('supabase_user_id', $user->id);
         $request->session()->put('supabase_email', $user->email);
         $request->session()->put('supabase_access_token', $token); // cookie chiffré (SESSION_ENCRYPT=true)
+        $request->session()->put('trial_ends_at', $subscription['trial_ends_at']);
+        $request->session()->put('is_premium', $subscription['is_premium']);
 
         return response()->json([
             'status' => 'ok',
@@ -65,6 +70,32 @@ final class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return response()->json(['status' => 'ok']);
+    }
+
+    /**
+     * Récupère l'état de l'abonnement (essai / premium) depuis Supabase.
+     *
+     * @return array{trial_ends_at: ?string, is_premium: bool}
+     */
+    private function fetchSubscription(string $userId, string $token): array
+    {
+        try {
+            $this->supabase->asUser($token);
+            $rows = $this->supabase->select('profiles', [
+                'select' => 'trial_ends_at,is_premium',
+                'id' => 'eq.' . $userId,
+            ]);
+
+            $row = $rows[0] ?? [];
+
+            return [
+                'trial_ends_at' => $row['trial_ends_at'] ?? null,
+                'is_premium' => (bool) ($row['is_premium'] ?? false),
+            ];
+        } catch (\Throwable) {
+            // En cas d'échec de lecture, on laisse passer l'utilisateur authentifié.
+            return ['trial_ends_at' => null, 'is_premium' => false];
+        }
     }
 
     /**
