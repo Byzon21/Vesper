@@ -40,7 +40,13 @@ final class AuthController extends Controller
             abort(401, 'Authentification incomplète.');
         }
 
-        $this->provisionKeys($user->id);
+        try {
+            $this->provisionKeys($user->id);
+        } catch (\Throwable $e) {
+            // Le provisionnement des clés ne doit pas bloquer la connexion :
+            // opération idempotente, réessayée lors d'un prochain appel.
+            report($e);
+        }
 
         // Récupère l'état de l'abonnement (essai / premium) depuis Supabase.
         $subscription = $this->fetchSubscription($user->id, $token);

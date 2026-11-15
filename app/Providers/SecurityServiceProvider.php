@@ -14,6 +14,7 @@ use App\Support\Security\Vault\Drivers\HashiCorpVault;
 use App\Support\Security\Vault\Drivers\LocalEncryptedVault;
 use App\Support\Security\Vault\SecretVault;
 use App\Support\Security\Vault\VaultManager;
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +29,13 @@ final class SecurityServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        // --- Client HTTP partagé (Guzzle) ---
+        // Requis par SupabaseJwtVerifier, SupabaseClient et HashiCorpVault.
+        $this->app->singleton(ClientInterface::class, fn () => new Client([
+            'timeout' => 10,
+            'connect_timeout' => 5,
+        ]));
+
         // --- Primitives cryptographiques ---
         $this->app->singleton(FieldCipher::class);
 
