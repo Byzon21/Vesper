@@ -52,30 +52,41 @@
         </div>
     </header>
 
-    {{-- ===== Héros ===== --}}
-    <section class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1920&auto=format&fit=crop')"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-emerald-950/90 via-emerald-900/85 to-slate-950/95"></div>
-        <div class="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-emerald-500/30 blur-3xl"></div>
-        <div class="absolute -right-24 top-1/3 h-96 w-96 rounded-full bg-amber-500/20 blur-3xl"></div>
+    {{-- ===== Héros : globe en vedette ===== --}}
+    <section class="relative overflow-hidden bg-emerald-950">
+        <div class="absolute inset-0 bg-gradient-to-b from-emerald-950 via-emerald-900 to-slate-950"></div>
+        <div class="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-emerald-500/25 blur-3xl"></div>
+        <div class="absolute -right-24 top-1/3 h-96 w-96 rounded-full bg-amber-500/15 blur-3xl"></div>
 
-        <div class="relative mx-auto max-w-6xl px-4 py-24 text-center text-white sm:px-6 sm:py-32 lg:py-40">
+        <div class="relative mx-auto max-w-6xl px-4 pb-16 pt-14 text-center text-white sm:px-6 sm:pb-20 sm:pt-16">
             <div class="animate-fade-in inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide backdrop-blur">
                 <x-icon name="sparkles" class="h-4 w-4 text-amber-300" />
                 La gestion financière nouvelle génération
             </div>
 
             <h1 class="animate-fade-in-up mx-auto mt-6 max-w-4xl text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
-                Vos finances personnelles et de couple,
-                <span class="bg-gradient-to-r from-amber-300 via-amber-400 to-emerald-300 bg-clip-text text-transparent">en toute sérénité</span>
+                Vos finances, <span class="bg-gradient-to-r from-amber-300 via-amber-400 to-emerald-300 bg-clip-text text-transparent">sans frontières</span>
             </h1>
 
-            <p class="animate-fade-in-up delay-100 mx-auto mt-6 max-w-2xl text-lg text-emerald-50/90 sm:text-xl">
-                Suivez vos dépenses, gérez 110+ devises (USD, CDF, CFA…) et reprenez le contrôle de votre budget —
-                sans jamais exposer vos informations à qui que ce soit.
+            <p class="animate-fade-in-up delay-100 mx-auto mt-5 max-w-2xl text-lg text-emerald-50/90 sm:text-xl">
+                Suivez vos dépenses personnelles et de couple, gérez 110+ devises et reprenez le contrôle de votre budget — en toute sécurité.
             </p>
 
-            <div class="animate-fade-in-up delay-200 mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            {{-- Globe terrestre WebGL (cobe) --}}
+            <div class="animate-fade-in-up delay-200 relative mx-auto mt-6 w-full max-w-md sm:max-w-xl lg:max-w-2xl">
+                <div class="relative aspect-square">
+                    <canvas id="globe-canvas" width="1000" height="1000" class="h-full w-full" aria-hidden="true"></canvas>
+
+                    <span class="animate-currency-pop absolute top-4 left-0 inline-flex items-center gap-1.5 rounded-full border border-emerald-300/40 bg-emerald-100/90 px-3 py-1 text-xs font-bold text-emerald-800 shadow-lg backdrop-blur dark:border-emerald-500/30 dark:bg-emerald-500/20 dark:text-emerald-200" style="animation-delay:0s">$ USD</span>
+                    <span class="animate-currency-pop absolute top-0 right-0 inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-100/90 px-3 py-1 text-xs font-bold text-amber-800 shadow-lg backdrop-blur dark:border-amber-500/30 dark:bg-amber-500/20 dark:text-amber-200" style="animation-delay:1s">€ EUR</span>
+                    <span class="animate-currency-pop absolute top-1/2 -left-4 inline-flex items-center gap-1.5 rounded-full border border-sky-300/40 bg-sky-100/90 px-3 py-1 text-xs font-bold text-sky-800 shadow-lg backdrop-blur dark:border-sky-500/30 dark:bg-sky-500/20 dark:text-sky-200" style="animation-delay:2s">FC CDF</span>
+                    <span class="animate-currency-pop absolute top-1/2 -right-4 inline-flex items-center gap-1.5 rounded-full border border-rose-300/40 bg-rose-100/90 px-3 py-1 text-xs font-bold text-rose-800 shadow-lg backdrop-blur dark:border-rose-500/30 dark:bg-rose-500/20 dark:text-rose-200" style="animation-delay:3s">CFA</span>
+                    <span class="animate-currency-pop absolute bottom-6 left-0 inline-flex items-center gap-1.5 rounded-full border border-violet-300/40 bg-violet-100/90 px-3 py-1 text-xs font-bold text-violet-800 shadow-lg backdrop-blur dark:border-violet-500/30 dark:bg-violet-500/20 dark:text-violet-200" style="animation-delay:4s">£ GBP</span>
+                    <span class="animate-currency-pop absolute bottom-2 right-0 inline-flex items-center gap-1.5 rounded-full border border-teal-300/40 bg-teal-100/90 px-3 py-1 text-xs font-bold text-teal-800 shadow-lg backdrop-blur dark:border-teal-500/30 dark:bg-teal-500/20 dark:text-teal-200" style="animation-delay:5s">XOF</span>
+                </div>
+            </div>
+
+            <div class="animate-fade-in-up delay-300 mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a href="{{ route('register') }}" class="btn-primary text-base">
                     Commencer l'essai gratuit
                     <x-icon name="arrow-right" class="h-4 w-4" />
@@ -85,7 +96,7 @@
                 </a>
             </div>
 
-            <div class="animate-fade-in-up delay-300 mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-emerald-100/80">
+            <div class="animate-fade-in-up delay-300 mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-emerald-100/80">
                 <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-emerald-300" /> 7 jours offerts</span>
                 <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-emerald-300" /> Sans carte bancaire</span>
                 <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-emerald-300" /> Annulable à tout moment</span>
@@ -150,95 +161,6 @@
                 <strong class="text-emerald-700 dark:text-emerald-400">Vesper transforme ce chaos en clarté.</strong>
                 En quelques secondes par jour, vous savez exactement où va chaque franc, dollar ou euro — seul ou à deux.
             </p>
-        </div>
-    </section>
-
-    {{-- ===== Globe : multi-devises ===== --}}
-    <section class="relative overflow-hidden bg-emerald-950 py-20 text-white sm:py-28">
-        <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl"></div>
-        <div class="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl"></div>
-
-        <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
-            <div data-reveal>
-                <p class="text-sm font-bold uppercase tracking-widest text-amber-300">Multi-devises</p>
-                <h2 class="mt-3 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">Votre argent voyage, suivez-le partout</h2>
-                <p class="mt-4 text-lg text-emerald-100/85">
-                    Que vous soyez en RDC, en Europe ou ailleurs, Vesper gère plus de 110 devises et les convertit
-                    automatiquement. Fini les calculs à la main : votre budget reste clair, où que vous soyez.
-                </p>
-                <ul class="mt-8 space-y-4">
-                    @foreach (['Conversion automatique et taux à jour', 'Suivi bimétaire USD / CDF pensé pour la RDC', 'Revenus dans une devise, dépenses dans une autre'] as $item)
-                        <li class="flex items-start gap-3">
-                            <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-300">
-                                <x-icon name="check" class="h-4 w-4" />
-                            </span>
-                            <span class="text-emerald-50/90">{{ $item }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-                <a href="{{ route('register') }}" class="btn-primary mt-9">
-                    Essayer gratuitement
-                    <x-icon name="arrow-right" class="h-4 w-4" />
-                </a>
-            </div>
-
-            <div data-reveal class="relative mx-auto w-full max-w-md">
-                <div class="relative aspect-square">
-                    <svg viewBox="0 0 400 400" class="h-full w-full drop-shadow-2xl" aria-hidden="true">
-                        <defs>
-                            <radialGradient id="ocean" cx="35%" cy="30%" r="75%">
-                                <stop offset="0%" stop-color="#38bdf8"/>
-                                <stop offset="55%" stop-color="#0284c7"/>
-                                <stop offset="100%" stop-color="#0c4a6e"/>
-                            </radialGradient>
-                            <radialGradient id="shade" cx="35%" cy="30%" r="85%">
-                                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
-                                <stop offset="45%" stop-color="#ffffff" stop-opacity="0"/>
-                                <stop offset="100%" stop-color="#000000" stop-opacity="0.4"/>
-                            </radialGradient>
-                            <clipPath id="globe-clip"><circle cx="200" cy="200" r="172"/></clipPath>
-                        </defs>
-
-                        <g clip-path="url(#globe-clip)">
-                            <g>
-                                <animateTransform attributeName="transform" type="translate" from="0 0" to="-400 0" dur="32s" repeatCount="indefinite"/>
-                                <g fill="#34d399" fill-opacity="0.9">
-                                    <path d="M70 120 Q90 70 140 85 Q165 95 150 140 Q140 175 105 170 Q75 165 70 120Z"/>
-                                    <path d="M125 235 Q140 210 165 220 Q180 260 165 320 Q150 350 130 330 Q112 300 125 235Z"/>
-                                    <path d="M232 95 Q240 75 265 82 Q278 95 268 112 Q252 125 238 112 Q230 105 232 95Z"/>
-                                    <path d="M238 185 Q238 150 270 152 Q295 155 292 205 Q290 265 262 278 Q240 285 238 250 Q236 215 238 185Z"/>
-                                    <path d="M292 78 Q310 45 355 55 Q378 62 372 95 Q368 130 340 150 Q305 165 295 130 Q288 105 292 78Z"/>
-                                    <path d="M332 288 Q340 272 358 278 Q368 290 362 305 Q352 316 338 310 Q328 300 332 288Z"/>
-                                </g>
-                                <g fill="#34d399" fill-opacity="0.9" transform="translate(400 0)">
-                                    <path d="M70 120 Q90 70 140 85 Q165 95 150 140 Q140 175 105 170 Q75 165 70 120Z"/>
-                                    <path d="M125 235 Q140 210 165 220 Q180 260 165 320 Q150 350 130 330 Q112 300 125 235Z"/>
-                                    <path d="M232 95 Q240 75 265 82 Q278 95 268 112 Q252 125 238 112 Q230 105 232 95Z"/>
-                                    <path d="M238 185 Q238 150 270 152 Q295 155 292 205 Q290 265 262 278 Q240 285 238 250 Q236 215 238 185Z"/>
-                                    <path d="M292 78 Q310 45 355 55 Q378 62 372 95 Q368 130 340 150 Q305 165 295 130 Q288 105 292 78Z"/>
-                                    <path d="M332 288 Q340 272 358 278 Q368 290 362 305 Q352 316 338 310 Q328 300 332 288Z"/>
-                                </g>
-                            </g>
-                            <g stroke="#ffffff" stroke-opacity="0.14" fill="none">
-                                <ellipse cx="200" cy="200" rx="172" ry="38"/>
-                                <ellipse cx="200" cy="200" rx="172" ry="86"/>
-                                <ellipse cx="200" cy="200" rx="86" ry="172"/>
-                                <ellipse cx="200" cy="200" rx="38" ry="172"/>
-                            </g>
-                        </g>
-
-                        <circle cx="200" cy="200" r="172" fill="url(#shade)"/>
-                        <circle cx="200" cy="200" r="172" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/>
-                    </svg>
-
-                    <span class="animate-currency-pop absolute top-6 left-0 inline-flex items-center gap-1.5 rounded-full border border-emerald-300/40 bg-emerald-100/90 px-3 py-1 text-xs font-bold text-emerald-800 shadow-lg backdrop-blur dark:border-emerald-500/30 dark:bg-emerald-500/20 dark:text-emerald-200" style="animation-delay:0s">$ USD</span>
-                    <span class="animate-currency-pop absolute top-2 right-0 inline-flex items-center gap-1.5 rounded-full border border-amber-300/40 bg-amber-100/90 px-3 py-1 text-xs font-bold text-amber-800 shadow-lg backdrop-blur dark:border-amber-500/30 dark:bg-amber-500/20 dark:text-amber-200" style="animation-delay:1s">€ EUR</span>
-                    <span class="animate-currency-pop absolute top-1/2 -left-3 inline-flex items-center gap-1.5 rounded-full border border-sky-300/40 bg-sky-100/90 px-3 py-1 text-xs font-bold text-sky-800 shadow-lg backdrop-blur dark:border-sky-500/30 dark:bg-sky-500/20 dark:text-sky-200" style="animation-delay:2s">FC CDF</span>
-                    <span class="animate-currency-pop absolute top-1/2 -right-3 inline-flex items-center gap-1.5 rounded-full border border-rose-300/40 bg-rose-100/90 px-3 py-1 text-xs font-bold text-rose-800 shadow-lg backdrop-blur dark:border-rose-500/30 dark:bg-rose-500/20 dark:text-rose-200" style="animation-delay:3s">CFA</span>
-                    <span class="animate-currency-pop absolute bottom-6 left-2 inline-flex items-center gap-1.5 rounded-full border border-violet-300/40 bg-violet-100/90 px-3 py-1 text-xs font-bold text-violet-800 shadow-lg backdrop-blur dark:border-violet-500/30 dark:bg-violet-500/20 dark:text-violet-200" style="animation-delay:4s">£ GBP</span>
-                    <span class="animate-currency-pop absolute bottom-3 right-0 inline-flex items-center gap-1.5 rounded-full border border-teal-300/40 bg-teal-100/90 px-3 py-1 text-xs font-bold text-teal-800 shadow-lg backdrop-blur dark:border-teal-500/30 dark:bg-teal-500/20 dark:text-teal-200" style="animation-delay:5s">XOF</span>
-                </div>
-            </div>
         </div>
     </section>
 

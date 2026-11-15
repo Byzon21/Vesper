@@ -10,6 +10,7 @@ import './posthog';
 import './supabase';
 import './auth';
 import './pwa/register';
+import { initGlobe } from './globe';
 
 window.Alpine = Alpine;
 
@@ -60,5 +61,11 @@ if ('IntersectionObserver' in window) {
     );
 
     document.querySelectorAll('[data-reveal]').forEach((el) => revealObserver.observe(el));
+}
+
+// Globe terrestre (héros de la landing).
+const globeCanvas = document.getElementById('globe-canvas');
+if (globeCanvas) {
+    initGlobe(globeCanvas);
 }
 
