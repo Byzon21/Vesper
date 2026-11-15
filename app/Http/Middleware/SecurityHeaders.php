@@ -69,7 +69,7 @@ final class SecurityHeaders
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com",
             "font-src 'self' data:",
-            "connect-src 'self' https://*.supabase.co https://us.i.posthog.com",
+            "connect-src 'self' https://*.supabase.co https://us.i.posthog.com https://us-assets.i.posthog.com",
             "manifest-src 'self'",
             "worker-src 'self' blob:",
             "frame-src 'none'",

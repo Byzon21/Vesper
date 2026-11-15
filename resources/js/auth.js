@@ -179,3 +179,10 @@ if (passwordInput) {
     passwordInput.addEventListener('input', (e) => updatePasswordChecks(e.target.value));
 }
 
+// Sur la page de callback (/auth/callback), on lance automatiquement la
+// récupération de session. Le module est chargé en différé (type="module"),
+// donc document.body est déjà disponible : pas de course avec un script inline.
+if (document.body && document.body.dataset.callback === 'auth') {
+    handleAuthCallback();
+}
+

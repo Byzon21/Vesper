@@ -7,10 +7,9 @@
     <title>Connexion…</title>
     @vite(['resources/js/app.js'])
 </head>
-<body class="bg-slate-50 dark:bg-slate-950">
+<body class="bg-slate-50 dark:bg-slate-950" data-callback="auth">
     <div class="flex min-h-screen items-center justify-center">
         <p class="text-sm text-slate-500">Connexion en cours…</p>
     </div>
-    <script nonce="{{ $cspNonce ?? '' }}">window.handleAuthCallback();</script>
 </body>
 </html>
