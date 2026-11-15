@@ -6,6 +6,7 @@ namespace App\Livewire\Onboarding;
 
 use App\Services\Supabase\SupabaseClient;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 /**
  * Assistant d'onboarding post-inscription.
@@ -16,12 +17,15 @@ use Livewire\Component;
  */
 final class Onboarding extends Component
 {
+    use WithFileUploads;
+
     public string $firstName = '';
     public string $lastName = '';
     public string $country = '';
     public string $accountType = 'personal';
     public string $partnerName = '';
     public array $currencies = [];
+    public $photo = null;
 
     /** @var array<string, string> */
     public const CURRENCIES = [
@@ -92,6 +96,7 @@ final class Onboarding extends Component
             'accountType' => ['required', 'in:personal,couple'],
             'partnerName' => ['nullable', 'required_if:accountType,couple', 'string', 'max:60'],
             'currencies' => ['required', 'array', 'min:1'],
+            'photo' => ['nullable', 'image', 'max:2048'],
         ];
     }
 
@@ -103,23 +108,54 @@ final class Onboarding extends Component
         $token = (string) session('supabase_access_token');
         $codes = array_values(array_filter($this->currencies));
 
-        $supabase->asUser($token);
-        $supabase->update('profiles', [
-            'first_name' => $this->firstName,
-            'last_name' => $this->lastName,
-            'display_name' => trim($this->firstName . ' ' . $this->lastName),
-            'country' => $this->country,
-            'account_type' => $this->accountType,
-            'partner_name' => $this->accountType === 'couple' ? $this->partnerName : null,
-            'currencies' => $codes,
-            'base_currency' => $codes[0] ?? 'USD',
-            'is_onboarded' => true,
-        ], ['id' => 'eq.' . $userId]);
+        if ($userId === '' || $token === '') {
+            $this->addError('form', 'Session expirée. Veuillez vous reconnecter.');
+            return;
+        }
+
+        try {
+            $supabase->asUser($token);
+
+            // Upload de la photo de profil (optionnel) vers Supabase Storage.
+            $avatarPath = null;
+            if ($this->photo) {
+                $ext = strtolower((string) $this->photo->getClientOriginalExtension()) ?: 'jpg';
+                $filename = $userId . '_' . time() . '.' . $ext;
+                $avatarPath = $supabase->uploadFile(
+                    'avatars',
+                    $filename,
+                    (string) file_get_contents((string) $this->photo->getRealPath()),
+                    (string) $this->photo->getMimeType() ?: 'image/jpeg',
+                );
+            }
+
+            $profile = [
+                'first_name' => $this->firstName,
+                'last_name' => $this->lastName,
+                'display_name' => trim($this->firstName . ' ' . $this->lastName),
+                'country' => $this->country,
+                'account_type' => $this->accountType,
+                'partner_name' => $this->accountType === 'couple' ? $this->partnerName : null,
+                'currencies' => $codes,
+                'base_currency' => $codes[0] ?? 'USD',
+                'is_onboarded' => true,
+            ];
+            if ($avatarPath !== null) {
+                $profile['avatar_path'] = $avatarPath;
+            }
+
+            $supabase->update('profiles', $profile, ['id' => 'eq.' . $userId]);
+        } catch (\Throwable $e) {
+            report($e);
+            $this->addError('form', "Impossible d'enregistrer vos informations. Avez-vous appliqué la migration 0010_onboarding.sql sur Supabase ?");
+            return;
+        }
 
         session()->put('is_onboarded', true);
         session()->put('base_currency', $codes[0] ?? 'USD');
         session()->put('currencies', $codes);
         session()->put('country', $this->country);
+        session()->put('account_type', $this->accountType);
 
         $this->redirect(route('dashboard'));
     }

@@ -8,6 +8,28 @@
     </div>
 
     <form wire:submit="save" class="mt-8 space-y-6" wire:loading.class="opacity-60 pointer-events-none" wire:target="save">
+        @error('form')
+            <div class="rounded-xl border border-brand-pink/40 bg-brand-pink/10 px-4 py-3 text-sm text-brand-pink">
+                {{ $message }}
+            </div>
+        @enderror
+
+        {{-- 0. Photo de profil --}}
+        <div class="flex items-center gap-4">
+            <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-full bg-slate-100 ring-2 ring-brand-green/20">
+                @if ($photo)
+                    <img src="{{ $photo->temporaryUrl() }}" alt="Aperçu" class="h-full w-full object-cover">
+                @else
+                    <x-icon name="users" class="h-full w-full p-5 text-slate-300" />
+                @endif
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold">Photo de profil <span class="font-normal text-slate-400">(optionnel)</span></p>
+                <input type="file" wire:model="photo" accept="image/*" class="mt-2 block w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-green/10 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-brand-green hover:file:bg-brand-green/20">
+                @error('photo') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
         {{-- 1. Identité --}}
         <div>
             <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-brand-green">1 · Votre identité</h2>

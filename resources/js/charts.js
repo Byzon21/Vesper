@@ -27,7 +27,17 @@ export function initCharts() {
                 datasets: [{
                     label,
                     data: values,
-                    backgroundColor: isDoughnut ? PALETTE : 'rgba(50, 147, 111, 0.12)',
+                    backgroundColor: isDoughnut
+                        ? PALETTE
+                        : (context) => {
+                            const { chart } = context;
+                            const { ctx, chartArea } = chart;
+                            if (!chartArea) return 'rgba(50, 147, 111, 0.15)';
+                            const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                            gradient.addColorStop(0, 'rgba(50, 147, 111, 0.35)');
+                            gradient.addColorStop(1, 'rgba(50, 147, 111, 0.02)');
+                            return gradient;
+                        },
                     borderColor: isDoughnut ? 'rgba(255,255,255,0.7)' : '#32936f',
                     borderWidth: isDoughnut ? 2 : 3,
                     fill: isLine,
@@ -35,6 +45,7 @@ export function initCharts() {
                     pointRadius: isLine ? 4 : 0,
                     pointBackgroundColor: '#32936f',
                     pointBorderColor: '#ffffff',
+                    pointHoverRadius: 6,
                 }],
             },
             options: {

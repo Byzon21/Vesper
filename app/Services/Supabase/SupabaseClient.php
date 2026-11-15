@@ -123,6 +123,29 @@ final class SupabaseClient
     }
 
     /**
+     * Téléverse un fichier dans Supabase Storage (bucket public).
+     *
+     * @return string|null URL publique du fichier, ou null en cas d'échec.
+     */
+    public function uploadFile(string $bucket, string $path, string $contents, string $contentType): ?string
+    {
+        try {
+            $this->http->request('POST', rtrim($this->url, '/') . "/storage/v1/object/{$bucket}/{$path}", [
+                'headers' => [
+                    'Authorization' => $this->authorization,
+                    'apikey' => $this->anonKey(),
+                    'Content-Type' => $contentType,
+                ],
+                'body' => $contents,
+            ]);
+
+            return "/storage/v1/object/public/{$bucket}/{$path}";
+        } catch (GuzzleException) {
+            return null;
+        }
+    }
+
+    /**
      * @param array<string, mixed> $options
      * @return array<int|string, mixed>
      */

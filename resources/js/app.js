@@ -79,4 +79,5 @@ if (globeCanvas) {
 
 // Graphiques (Chart.js).
 initCharts();
+document.addEventListener('livewire:navigated', initCharts);
 

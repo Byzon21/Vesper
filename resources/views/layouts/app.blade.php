@@ -40,7 +40,9 @@
         {{ $slot ?? '' }}
     </main>
 
-    <x-navigation.bottom-nav />
+    @unless (request()->routeIs('onboarding'))
+        <x-navigation.bottom-nav />
+    @endunless
 
     {{-- Champ honeypot anti-bot (invisible pour les humains) --}}
     <div style="position:absolute;left:-9999px" aria-hidden="true">
