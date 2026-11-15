@@ -64,7 +64,10 @@ final class SecurityHeaders
             "object-src 'none'",
             "frame-ancestors 'none'",
             "form-action 'self'",
-            "script-src 'self' 'nonce-{$nonce}' https://us-assets.i.posthog.com",
+            // 'unsafe-eval' : requis par Alpine.js/Livewire, qui évaluent les
+            // expressions (x-data, :class…) via new Function(). Sans lui, les
+            // formulaires Livewire ne se soumettent plus.
+            "script-src 'self' 'nonce-{$nonce}' 'unsafe-eval' https://us-assets.i.posthog.com",
             // 'unsafe-inline' styles : nécessaire pour Tailwind/Livewire ; n'exécute pas de code.
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com",

@@ -10,8 +10,6 @@ import '@fontsource/sora/600.css';
 import '@fontsource/sora/700.css';
 import '@fontsource/sora/800.css';
 
-import Alpine from 'alpinejs';
-
 import './theme';
 import './posthog';
 import './supabase';
@@ -19,8 +17,6 @@ import './auth';
 import './pwa/register';
 import { initGlobe } from './globe';
 import { initCharts } from './charts';
-
-window.Alpine = Alpine;
 
 // Fonction partagée de bascule de thème (utilisée par le layout et les menus).
 window.applyTheme = (theme) => {
@@ -38,8 +34,6 @@ window.toggleTheme = () => {
     localStorage.setItem('vesper.theme', next);
     window.applyTheme(next);
 };
-
-Alpine.start();
 
 // Délégation des actions (CSP-safe : remplace les handlers onclick inline,
 // qui sont bloqués par la Content-Security-Policy).
