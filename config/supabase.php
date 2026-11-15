@@ -16,6 +16,8 @@ return [
     'jwks_url' => env('SUPABASE_JWKS_URL'),
     'issuer' => env('SUPABASE_JWT_ISSUER'),
     'audience' => env('SUPABASE_JWT_AUDIENCE', 'authenticated'),
+    // Tolérance d'horloge (secondes) pour la vérification JWT (décalage client/serveur).
+    'jwt_leeway' => env('SUPABASE_JWT_LEEWAY', 120),
 
     // Clés en clair via env (DEV uniquement) ; en production elles sont
     // résolues via le Vault (vault_paths ci-dessous).

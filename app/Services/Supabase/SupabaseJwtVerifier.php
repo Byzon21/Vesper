@@ -33,6 +33,12 @@ final class SupabaseJwtVerifier
     public function verify(string $jwt): SupabaseUser
     {
         try {
+            // Tolérance d'horloge (clock skew) : le jeton Supabase est émis par
+            // un serveur distant dont l'horloge peut être légèrement en avance
+            // sur la nôtre. Sans leeway, un iat « futur » (ex. 57 s) rejetterait
+            // le jeton et casserait la connexion (Google OAuth + confirmation email).
+            JWT::$leeway = (int) config('supabase.jwt_leeway', 120);
+
             $payload = JWT::decode($jwt, JWK::parseKeySet($this->jwks()));
         } catch (\Throwable $e) {
             throw new \RuntimeException('Jeton Supabase invalide.', 0, $e);
