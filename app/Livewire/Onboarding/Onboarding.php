@@ -156,6 +156,7 @@ final class Onboarding extends Component
         session()->put('currencies', $codes);
         session()->put('country', $this->country);
         session()->put('account_type', $this->accountType);
+        session()->save();
 
         $this->redirect(route('dashboard'));
     }

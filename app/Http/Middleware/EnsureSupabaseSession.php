@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Services\Supabase\SupabaseClient;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -19,16 +20,26 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class EnsureSupabaseSession
 {
+    public function __construct(
+        private readonly SupabaseClient $supabase,
+    ) {
+    }
+
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->session()->has('supabase_user_id')) {
             return redirect()->route('login');
         }
 
-        // Onboarding non complété → assistant de personnalisation (identité,
-        // pays, type de compte, devises). Exempte la route d'onboarding elle-même.
+        // Onboarding : quand la session indique « non onboardé », on re-vérifie
+        // en base (Supabase). Le session()->put() effectué à la soumission
+        // Livewire peut ne pas avoir été persisté au moment de la redirection,
+        // ce qui causait une boucle onboarding → dashboard → onboarding.
         if (! $request->session()->get('is_onboarded', false) && ! $request->routeIs('onboarding')) {
-            return redirect()->route('onboarding');
+            if (! $this->isOnboarded($request)) {
+                return redirect()->route('onboarding');
+            }
+            $request->session()->put('is_onboarded', true);
         }
 
         // Abonnement : essai expiré et non premium → redirection vers la
@@ -42,5 +53,30 @@ final class EnsureSupabaseSession
         }
 
         return $next($request);
+    }
+
+    /**
+     * Vérifie en base si l'utilisateur a complété son onboarding.
+     */
+    private function isOnboarded(Request $request): bool
+    {
+        try {
+            $userId = (string) $request->session()->get('supabase_user_id');
+            $token = (string) $request->session()->get('supabase_access_token');
+
+            if ($userId === '' || $token === '') {
+                return false;
+            }
+
+            $this->supabase->asUser($token);
+            $rows = $this->supabase->select('profiles', [
+                'select' => 'is_onboarded',
+                'id' => 'eq.' . $userId,
+            ]);
+
+            return (bool) ($rows[0]['is_onboarded'] ?? false);
+        } catch (\Throwable) {
+            return false;
+        }
     }
 }
