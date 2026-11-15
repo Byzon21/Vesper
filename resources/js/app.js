@@ -31,3 +31,13 @@ window.toggleTheme = () => {
 };
 
 Alpine.start();
+
+// Délégation des actions (CSP-safe : remplace les handlers onclick inline,
+// qui sont bloqués par la Content-Security-Policy).
+document.addEventListener('click', (event) => {
+    const el = event.target.closest('[data-action]');
+    if (!el) return;
+    const fn = window[el.dataset.action];
+    if (typeof fn === 'function') fn(event);
+});
+

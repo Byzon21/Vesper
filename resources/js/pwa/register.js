@@ -1,12 +1,10 @@
 /**
- * Vesper — Enregistrement du Service Worker (PWA installable, offline-first
- * pour les assets statiques uniquement ; AUCUNE donnée sensible en cache).
+ * Service worker DÉSACTIVÉ en développement : il interfère avec le
+ * rechargement des assets (cache stale → "Failed to fetch").
+ * À réactiver pour la production (PWA offline).
  */
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch((err) => {
-            // Échec silencieux : ne jamais bloquer l'expérience.
-            console.warn('SW registration failed', err);
-        });
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => registration.unregister());
     });
 }

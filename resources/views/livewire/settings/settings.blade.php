@@ -3,7 +3,7 @@
     <div class="card space-y-4 text-sm">
         <div class="flex items-center justify-between">
             <span>@lang('settings.theme')</span>
-            <button type="button" onclick="toggleTheme()" class="btn-ghost">
+            <button type="button" data-action="toggleTheme" class="btn-ghost">
                 <x-icon name="settings" class="h-4 w-4" />
             </button>
         </div>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="border-t border-slate-200 pt-4 dark:border-slate-800">
-            <button type="button" onclick="window.signOut()" class="btn-ghost w-full text-red-600">
+            <button type="button" data-action="signOut" class="btn-ghost w-full text-red-600">
                 Déconnexion
             </button>
         </div>

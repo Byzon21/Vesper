@@ -11,6 +11,6 @@
     <div class="flex min-h-screen items-center justify-center">
         <p class="text-sm text-slate-500">Connexion en cours…</p>
     </div>
-    <script>window.handleAuthCallback();</script>
+    <script nonce="{{ $cspNonce ?? '' }}">window.handleAuthCallback();</script>
 </body>
 </html>
