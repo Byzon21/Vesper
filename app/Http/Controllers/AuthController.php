@@ -48,8 +48,8 @@ final class AuthController extends Controller
             report($e);
         }
 
-        // Récupère l'état de l'abonnement (essai / premium) depuis Supabase.
-        $subscription = $this->fetchSubscription($user->id, $token);
+        // Récupère le profil (abonnement + préférences d'onboarding) depuis Supabase.
+        $profile = $this->fetchProfile($user->id, $token);
 
         // Anti-fixation de session.
         $request->session()->regenerate();
@@ -57,8 +57,13 @@ final class AuthController extends Controller
         $request->session()->put('supabase_user_id', $user->id);
         $request->session()->put('supabase_email', $user->email);
         $request->session()->put('supabase_access_token', $token); // cookie chiffré (SESSION_ENCRYPT=true)
-        $request->session()->put('trial_ends_at', $subscription['trial_ends_at']);
-        $request->session()->put('is_premium', $subscription['is_premium']);
+        $request->session()->put('trial_ends_at', $profile['trial_ends_at']);
+        $request->session()->put('is_premium', $profile['is_premium']);
+        $request->session()->put('is_onboarded', $profile['is_onboarded']);
+        $request->session()->put('base_currency', $profile['base_currency']);
+        $request->session()->put('currencies', $profile['currencies']);
+        $request->session()->put('country', $profile['country']);
+        $request->session()->put('account_type', $profile['account_type']);
 
         return response()->json([
             'status' => 'ok',
@@ -107,28 +112,50 @@ final class AuthController extends Controller
     }
 
     /**
-     * Récupère l'état de l'abonnement (essai / premium) depuis Supabase.
+     * Récupère le profil utilisateur (abonnement + préférences d'onboarding).
      *
-     * @return array{trial_ends_at: ?string, is_premium: bool}
+     * @return array{trial_ends_at: ?string, is_premium: bool, is_onboarded: bool,
+     *               base_currency: string, currencies: array<int, string>,
+     *               country: ?string, account_type: string}
      */
-    private function fetchSubscription(string $userId, string $token): array
+    private function fetchProfile(string $userId, string $token): array
     {
+        $defaults = [
+            'trial_ends_at' => null,
+            'is_premium' => false,
+            'is_onboarded' => false,
+            'base_currency' => 'USD',
+            'currencies' => ['USD'],
+            'country' => null,
+            'account_type' => 'personal',
+        ];
+
         try {
             $this->supabase->asUser($token);
             $rows = $this->supabase->select('profiles', [
-                'select' => 'trial_ends_at,is_premium',
+                'select' => 'trial_ends_at,is_premium,is_onboarded,base_currency,currencies,country,account_type',
                 'id' => 'eq.' . $userId,
             ]);
 
             $row = $rows[0] ?? [];
 
+            $currencies = $row['currencies'] ?? null;
+            if (! is_array($currencies) || $currencies === []) {
+                $currencies = [$row['base_currency'] ?? 'USD'];
+            }
+
             return [
                 'trial_ends_at' => $row['trial_ends_at'] ?? null,
                 'is_premium' => (bool) ($row['is_premium'] ?? false),
+                'is_onboarded' => (bool) ($row['is_onboarded'] ?? false),
+                'base_currency' => (string) ($row['base_currency'] ?? 'USD'),
+                'currencies' => array_values($currencies),
+                'country' => $row['country'] ?? null,
+                'account_type' => (string) ($row['account_type'] ?? 'personal'),
             ];
         } catch (\Throwable) {
             // En cas d'échec de lecture, on laisse passer l'utilisateur authentifié.
-            return ['trial_ends_at' => null, 'is_premium' => false];
+            return $defaults;
         }
     }
 

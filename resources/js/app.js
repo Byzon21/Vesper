@@ -18,6 +18,7 @@ import './supabase';
 import './auth';
 import './pwa/register';
 import { initGlobe } from './globe';
+import { initCharts } from './charts';
 
 window.Alpine = Alpine;
 
@@ -75,4 +76,7 @@ const globeCanvas = document.getElementById('globe-canvas');
 if (globeCanvas) {
     initGlobe(globeCanvas);
 }
+
+// Graphiques (Chart.js).
+initCharts();
 

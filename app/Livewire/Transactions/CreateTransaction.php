@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Livewire\Transactions;
 
-use App\Domain\Currency\BiMonetaryAllocation;
-use App\Domain\Currency\BiMonetaryService;
-use App\Domain\Currency\Money;
 use Livewire\Component;
 
 /**
  * Saisie d'une transaction (composant Livewire).
  *
- * Démontre le cas bimétaire critique RDC : l'utilisateur renseigne certains
- * champs en USD et d'autres en CDF ; le service unifie les montants dans la
- * devise de base du foyer pour les rapports globaux.
+ * La devise est choisie parmi les devises préférées de l'utilisateur (définies
+ * à l'onboarding), la devise principale étant sélectionnée par défaut — fini le
+ * franc congolais imposé à tous.
  *
  * La persistance (non illustrée ici) passe par un TransactionService qui :
  *  1. chiffre chaque montant (FieldEncryptor + DEK du foyer),
@@ -27,13 +24,39 @@ final class CreateTransaction extends Component
     public string $scope = 'personal';
     public string $occurredAt = '';
     public string $note = '';
+    public string $amount = '';
+    public string $currency = 'USD';
 
-    // Champs bimétaires (RDC) : montant en USD et/ou en CDF.
-    public string $usdAmount = '';
-    public string $cdfAmount = '';
-    public string $baseCurrency = 'USD';
+    /** @var array<int, string> */
+    public array $availableCurrencies = [];
 
-    public ?string $unifiedTotal = null;
+    /** @var array<string, string> */
+    public const CURRENCY_LABELS = [
+        'USD' => 'USD — Dollar américain',
+        'EUR' => 'EUR — Euro',
+        'GBP' => 'GBP — Livre sterling',
+        'CAD' => 'CAD — Dollar canadien',
+        'CHF' => 'CHF — Franc suisse',
+        'CDF' => 'CDF — Franc congolais',
+        'XOF' => 'XOF — Franc CFA',
+        'XAF' => 'XAF — Franc CFA',
+        'NGN' => 'NGN — Naira',
+        'ZAR' => 'ZAR — Rand',
+        'GHS' => 'GHS — Cedi',
+        'KES' => 'KES — Shilling kényan',
+        'MAD' => 'MAD — Dirham',
+        'DZD' => 'DZD — Dinar algérien',
+        'TND' => 'TND — Dinar tunisien',
+        'JPY' => 'JPY — Yen',
+        'CNY' => 'CNY — Yuan',
+        'INR' => 'INR — Roupie',
+    ];
+
+    public function mount(): void
+    {
+        $this->availableCurrencies = array_values((array) session('currencies', ['USD']));
+        $this->currency = (string) session('base_currency', $this->availableCurrencies[0] ?? 'USD');
+    }
 
     public function rules(): array
     {
@@ -42,44 +65,26 @@ final class CreateTransaction extends Component
             'kind' => ['required', 'in:expense,income,transfer'],
             'scope' => ['required', 'in:personal,shared'],
             'occurredAt' => ['required', 'date'],
-            'usdAmount' => ['nullable', 'regex:/^\d+(\.\d+)?$/'],
-            'cdfAmount' => ['nullable', 'regex:/^\d+(\.\d+)?$/'],
+            'amount' => ['required', 'regex:/^\d+(\.\d+)?$/'],
+            'currency' => ['required', 'string', 'size:3'],
         ];
     }
 
-    public function save(BiMonetaryService $unifier): void
+    public function save(): void
     {
         $this->validate();
-
-        $legs = [];
-        if ($this->usdAmount !== '' && $this->usdAmount !== '0') {
-            $legs[] = new Money($this->usdAmount, 'USD');
-        }
-        if ($this->cdfAmount !== '' && $this->cdfAmount !== '0') {
-            $legs[] = new Money($this->cdfAmount, 'CDF');
-        }
-
-        if ($legs === []) {
-            $this->addError('usdAmount', __('transactions.amount'));
-
-            return;
-        }
-
-        $allocation = new BiMonetaryAllocation($legs);
-
-        // Unification multi-devises (taux dynamique ou configuré).
-        $summary = $unifier->unify($allocation, $this->baseCurrency);
-
-        $this->unifiedTotal = (string) $summary->unifiedTotal->rounded(2);
 
         // → Ici : chiffrement (FieldEncryptor) + persistance (Supabase RLS).
         session()->flash('status', __('transactions.save'));
 
-        $this->reset(['title', 'usdAmount', 'cdfAmount', 'note', 'unifiedTotal']);
+        $this->reset(['title', 'amount', 'note']);
     }
 
     public function render()
     {
-        return view('livewire.transactions.create-transaction');
+        return view('livewire.transactions.create-transaction', [
+            'currencyLabels' => self::CURRENCY_LABELS,
+        ]);
     }
 }
+

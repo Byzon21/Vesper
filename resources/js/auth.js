@@ -34,6 +34,14 @@ export async function signInWithGoogle() {
     });
 }
 
+function setSignupLoading(loading) {
+    const btn = document.querySelector('[data-action="signUpWithEmail"]');
+    if (!btn) return;
+    btn.disabled = loading;
+    btn.querySelector('.btn-idle')?.classList.toggle('hidden', loading);
+    btn.querySelector('.btn-loading')?.classList.toggle('hidden', !loading);
+}
+
 export async function signUpWithEmail() {
     if (!supabase) return;
 
@@ -52,52 +60,58 @@ export async function signUpWithEmail() {
         return;
     }
 
-    const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            // Après clic sur le lien de confirmation, on atterrit sur /auth/callback
-            // (qui établit la session puis redirige vers le dashboard).
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-    });
+    setSignupLoading(true);
 
-    if (error) {
-        if (feedback) feedback.textContent = error.message;
-        return;
-    }
-
-    // Cas 1 : session immédiate (confirmation d'email désactivée côté Supabase).
-    if (data.session) {
-        const res = await establishServerSession(data.session.access_token);
-        window.location.href = res.ok ? '/dashboard' : '/login';
-        return;
-    }
-
-    // Cas 2 : confirmation d'email requise → on la confirme côté serveur
-    // (essai gratuit instantané), puis on reconnecte l'utilisateur.
-    if (data.user) {
-        const confirmRes = await fetch('/auth/confirm', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken() },
-            body: JSON.stringify({ user_id: data.user.id }),
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                // Après clic sur le lien de confirmation, on atterrit sur /auth/callback
+                // (qui établit la session puis redirige vers le dashboard).
+                emailRedirectTo: `${window.location.origin}/auth/callback`,
+            },
         });
 
-        if (confirmRes.ok) {
-            const { data: signedIn, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            if (feedback) feedback.textContent = error.message;
+            return;
+        }
 
-            if (signInError) {
-                if (feedback) feedback.textContent = signInError.message;
-                return;
-            }
-
-            const res = await establishServerSession(signedIn.session.access_token);
+        // Cas 1 : session immédiate (confirmation d'email désactivée côté Supabase).
+        if (data.session) {
+            const res = await establishServerSession(data.session.access_token);
             window.location.href = res.ok ? '/dashboard' : '/login';
             return;
         }
-    }
 
-    if (feedback) feedback.textContent = 'Vérifiez votre boîte mail pour confirmer votre inscription (essai de 7 jours).';
+        // Cas 2 : confirmation d'email requise → on la confirme côté serveur
+        // (essai gratuit instantané), puis on reconnecte l'utilisateur.
+        if (data.user) {
+            const confirmRes = await fetch('/auth/confirm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken() },
+                body: JSON.stringify({ user_id: data.user.id }),
+            });
+
+            if (confirmRes.ok) {
+                const { data: signedIn, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+                if (signInError) {
+                    if (feedback) feedback.textContent = signInError.message;
+                    return;
+                }
+
+                const res = await establishServerSession(signedIn.session.access_token);
+                window.location.href = res.ok ? '/dashboard' : '/login';
+                return;
+            }
+        }
+
+        if (feedback) feedback.textContent = 'Vérifiez votre boîte mail pour confirmer votre inscription (essai de 7 jours).';
+    } finally {
+        setSignupLoading(false);
+    }
 }
 
 export async function handleAuthCallback() {

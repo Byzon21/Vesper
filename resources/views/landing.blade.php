@@ -304,6 +304,21 @@
         </div>
     </section>
 
+    {{-- ===== Graphique : croissance des économies ===== --}}
+    <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <div data-reveal class="mx-auto max-w-2xl text-center">
+            <p class="text-sm font-bold uppercase tracking-widest text-brand-green">Vos finances, visualisées</p>
+            <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Regardez vos économies grandir</h2>
+        </div>
+        <div data-reveal class="card mx-auto mt-8 max-w-3xl">
+            <div class="h-64">
+                <canvas data-chart="line" data-label="Économies"
+                        data-labels='["Jan","Fév","Mar","Avr","Mai","Juin"]'
+                        data-values='[500,720,680,980,1240,1600]'></canvas>
+            </div>
+        </div>
+    </section>
+
     {{-- ===== FAQ ===== --}}
     <section id="faq" class="mx-auto max-w-3xl scroll-mt-24 px-4 py-20 sm:px-6 sm:py-28">
         <div data-reveal class="text-center">

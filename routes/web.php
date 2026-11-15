@@ -7,6 +7,7 @@ use App\Http\Middleware\AuthenticateSupabase;
 use App\Http\Middleware\EnsureSupabaseSession;
 use App\Livewire\Couple\CoupleSpace;
 use App\Livewire\Dashboard\Dashboard;
+use App\Livewire\Onboarding\Onboarding;
 use App\Livewire\Reports\Reports;
 use App\Livewire\Settings\Settings;
 use App\Livewire\Transactions\TransactionList;
@@ -42,6 +43,7 @@ Route::post('/auth/logout', [AuthController::class, 'logout'])
 */
 
 Route::middleware([EnsureSupabaseSession::class])->group(function () {
+    Route::get('/onboarding', Onboarding::class)->name('onboarding');
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/transactions', TransactionList::class)->name('transactions');
     Route::get('/couple', CoupleSpace::class)->name('couple');

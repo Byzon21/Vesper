@@ -25,6 +25,12 @@ final class EnsureSupabaseSession
             return redirect()->route('login');
         }
 
+        // Onboarding non complété → assistant de personnalisation (identité,
+        // pays, type de compte, devises). Exempte la route d'onboarding elle-même.
+        if (! $request->session()->get('is_onboarded', false) && ! $request->routeIs('onboarding')) {
+            return redirect()->route('onboarding');
+        }
+
         // Abonnement : essai expiré et non premium → redirection vers la
         // page de tarification.
         if (! $request->session()->get('is_premium', false)) {
