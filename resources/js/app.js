@@ -14,7 +14,7 @@ import './theme';
 import './posthog';
 import './supabase';
 import './auth';
-import './pwa/register';
+import { initPwa } from './pwa/register';
 import { initGlobe } from './globe';
 import { initCharts } from './charts';
 
@@ -74,4 +74,7 @@ if (globeCanvas) {
 // Graphiques (Chart.js).
 initCharts();
 document.addEventListener('livewire:navigated', initCharts);
+
+// PWA (service worker + invite d'installation).
+initPwa();
 

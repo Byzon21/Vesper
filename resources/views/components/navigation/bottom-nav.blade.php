@@ -1,5 +1,5 @@
 {{-- Navigation basse mobile-first (5 entrées, périmètre volontairement restreint) --}}
-<nav class="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
+<nav class="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90 lg:hidden">
     <div class="mx-auto flex max-w-lg items-center justify-around py-2">
         <a href="{{ route('dashboard') }}" class="flex flex-col items-center gap-0.5 text-xs {{ request()->routeIs('dashboard') ? 'text-indigo-600' : 'text-slate-500' }}">
             <x-icon name="home" class="h-5 w-5" />

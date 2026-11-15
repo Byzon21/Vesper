@@ -12,6 +12,10 @@
 
     body {
         font-feature-settings: "tnum" 1; /* chiffres tabulaires pour les montants */
+        background-image:
+            radial-gradient(1100px 500px at 100% -5%, rgba(34, 116, 165, 0.05), transparent),
+            radial-gradient(900px 500px at -10% 110%, rgba(50, 147, 111, 0.05), transparent);
+        background-attachment: fixed;
     }
 
     /* Titres : police d'affichage (Sora) */

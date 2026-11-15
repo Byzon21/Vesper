@@ -31,23 +31,40 @@ self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
-    // Ne jamais intercepter les API (données sensibles) ni les méthodes non-GET.
-    if (request.method !== 'GET' || url.pathname.startsWith('/api/')) {
+    // Ne jamais intercepter les API (données sensibles), les requêtes non-GET,
+    // ni les requêtes cross-origin (PostHog, Unsplash, Supabase…).
+    if (request.method !== 'GET' || url.origin !== location.origin) {
+        return;
+    }
+    if (url.pathname.startsWith('/api/')) {
         return;
     }
 
-    // Stratégie cache-first pour les assets statiques, network fallback.
+    // Navigation (HTML) : network-first — toujours frais, pas de cache stale.
+    if (request.mode === 'navigate') {
+        event.respondWith(
+            fetch(request)
+                .then((response) => {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+                    return response;
+                })
+                .catch(() => caches.match(request)),
+        );
+        return;
+    }
+
+    // Assets statiques (hachés par Vite) : cache-first, sûr.
     event.respondWith(
         caches.match(request).then((cached) => {
             if (cached) return cached;
-
             return fetch(request).then((response) => {
-                if (response.ok && url.origin === location.origin) {
+                if (response.ok) {
                     const clone = response.clone();
                     caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
                 }
                 return response;
             });
-        })
+        }),
     );
 });
