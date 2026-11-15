@@ -77,6 +77,20 @@ php artisan serve
 
 > ⚠️ **Secrets** : ne mettez AUCUNE valeur réelle dans `.env`. En production, utilisez HashiCorp Vault (`VAULT_DRIVER=hashicorp`). Les chemins de secrets sont documentés dans `.env.example`.
 
+### 🪟 Dépannage Windows — certificats SSL (cURL)
+
+Sur Windows/PHP, cURL peut échouer sur les appels HTTPS (ex. récupération du JWKS Supabase) avec :
+`cURL error 60: SSL certificate problem: unable to get local issuer certificate`.
+
+**Correction** : télécharger le bundle CA officiel puis le référencer dans `php.ini` :
+```bash
+Invoke-WebRequest -Uri https://curl.se/ca/cacert.pem -OutFile C:\composer\cacert.pem
+# puis ajouter dans php.ini :
+#   curl.cainfo = "C:\composer\cacert.pem"
+#   openssl.cafile = "C:\composer\cacert.pem"
+```
+Puis redémarrer `serve.bat`.
+
 ## 📦 Déploiement GitHub
 
 Le CLI `gh` (v2.104.0) est installé. Authentifiez-vous puis créez/poussez le dépôt :
