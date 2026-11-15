@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#022c22">
+    <meta name="theme-color" content="#0a2540">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <title>Tarifs — Vesper</title>
     <script nonce="{{ $cspNonce ?? '' }}">document.documentElement.classList.add('js');</script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -33,7 +34,7 @@
                 <ul class="space-y-3">
                     @foreach (['Transactions illimitées', 'Mode couple', 'Multi-devises (110+)', 'Rapports PDF illimités', 'Analyses intelligentes (ML)'] as $feature)
                         <li class="flex items-center gap-3">
-                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-brand-green">
                                 <x-icon name="check" class="h-4 w-4" />
                             </span>
                             <span class="text-sm text-slate-700">{{ $feature }}</span>
@@ -47,7 +48,7 @@
                 </button>
 
                 <p class="mt-4 text-center text-sm text-slate-400">
-                    <a href="{{ route('landing') }}" class="transition hover:text-emerald-600">← Retour à l'accueil</a>
+                    <a href="{{ route('landing') }}" class="transition hover:text-brand-green">← Retour à l'accueil</a>
                 </p>
             </div>
         </div>

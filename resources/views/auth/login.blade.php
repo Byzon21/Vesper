@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="theme-color" content="#022c22">
+    <meta name="theme-color" content="#0a2540">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <title>Connexion — {{ __('app.name') }}</title>
     <script nonce="{{ $cspNonce ?? '' }}">document.documentElement.classList.add('js');</script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -39,7 +40,7 @@
 
             <p class="mt-5 text-center text-sm text-slate-500">
                 Pas encore de compte ?
-                <a href="{{ route('register') }}" class="font-semibold text-emerald-600 transition hover:text-emerald-700">Essai gratuit 7 jours</a>
+                <a href="{{ route('register') }}" class="font-semibold text-brand-green transition hover:text-brand-green">Essai gratuit 7 jours</a>
             </p>
         </div>
     </div>

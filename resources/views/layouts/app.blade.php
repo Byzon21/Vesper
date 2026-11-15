@@ -16,6 +16,7 @@
     {{-- PWA --}}
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
     <link rel="apple-touch-icon" href="{{ asset('icons/icon-192.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
     {{-- Thème initial (anti-flash, exécuté avant le paint) --}}
     <script nonce="{{ $cspNonce ?? '' }}">

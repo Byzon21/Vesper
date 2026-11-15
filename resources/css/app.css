@@ -14,6 +14,11 @@
         font-feature-settings: "tnum" 1; /* chiffres tabulaires pour les montants */
     }
 
+    /* Titres : police d'affichage (Sora) */
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-display;
+    }
+
     /* Zone sûre iOS (encoche) */
     .safe-bottom {
         padding-bottom: env(safe-area-inset-bottom);
@@ -23,18 +28,18 @@
 @layer components {
     .btn-primary {
         @apply inline-flex items-center justify-center gap-2 rounded-xl
-               bg-gradient-to-r from-emerald-600 to-teal-500
-               px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25
-               transition-all duration-300 hover:shadow-xl hover:shadow-emerald-600/40 hover:brightness-105
+               bg-gradient-to-r from-brand-blue to-brand-green
+               px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-blue/25
+               transition-all duration-300 hover:shadow-xl hover:shadow-brand-green/40 hover:brightness-105
                active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none;
     }
 
     .btn-ghost {
         @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200
                bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 backdrop-blur
-               transition-all duration-300 hover:border-emerald-300 hover:text-emerald-700
+               transition-all duration-300 hover:border-brand-green hover:text-brand-green
                active:scale-[0.97] dark:border-slate-700 dark:bg-slate-800/70
-               dark:text-slate-200 dark:hover:text-emerald-300;
+               dark:text-slate-200 dark:hover:text-brand-green;
     }
 
     .card {
@@ -45,8 +50,8 @@
 
     .input {
         @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm
-               text-slate-900 placeholder:text-slate-400 focus:border-emerald-500
-               focus:outline-none focus:ring-2 focus:ring-emerald-500/20
+               text-slate-900 placeholder:text-slate-400 focus:border-brand-green
+               focus:outline-none focus:ring-2 focus:ring-brand-green/20
                dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100;
     }
 }
@@ -63,9 +68,9 @@
     .delay-500 { animation-delay: 500ms; }
 }
 
-/* Dégradé de texte (fintech) */
+/* Dégradé de texte (palette Vesper : ambre → rose) */
 .text-gradient {
-    background-image: linear-gradient(to right, #059669, #14b8a6, #f59e0b);
+    background-image: linear-gradient(to right, #ffbf00, #e83f6f);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;

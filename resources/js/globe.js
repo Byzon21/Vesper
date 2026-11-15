@@ -8,7 +8,7 @@ import createGlobe from 'cobe';
 /**
  * Initialise le globe sur un <canvas>.
  * @param {HTMLCanvasElement} canvas
- * @returns {{ destroy: () => void } | null}
+ * @returns {{ update: Function, destroy: Function } | null}
  */
 export function initGlobe(canvas) {
     if (!canvas) {
@@ -28,9 +28,9 @@ export function initGlobe(canvas) {
             diffuse: 1.2,
             mapSamples: 16000,
             mapBrightness: 6,
-            baseColor: [0.05, 0.55, 0.5],
-            markerColor: [0.98, 0.72, 0.25],
-            glowColor: [0.16, 0.72, 0.62],
+            baseColor: [0.25, 0.75, 0.55],   // continents (vert #32936f éclairci)
+            markerColor: [1.0, 0.75, 0.0],   // marqueurs de villes (ambre #ffbf00)
+            glowColor: [0.13, 0.45, 0.65],   // halo (bleu #2274a5)
             markers: [
                 { location: [48.8566, 2.3522], size: 0.06 }, // Paris
                 { location: [51.5074, -0.1278], size: 0.05 }, // Londres
@@ -45,11 +45,15 @@ export function initGlobe(canvas) {
                 { location: [-33.8688, 151.2093], size: 0.05 }, // Sydney
                 { location: [14.5995, 120.9842], size: 0.05 }, // Manille
             ],
-            onRender: (state) => {
-                state.phi = phi;
-                phi += 0.004;
-            },
         });
+
+        // cobe 2.x n'a ni boucle interne ni callback onRender : on anime manuellement.
+        const animate = () => {
+            phi += 0.004;
+            globe.update({ phi });
+            requestAnimationFrame(animate);
+        };
+        requestAnimationFrame(animate);
 
         return globe;
     } catch (error) {
@@ -58,3 +62,4 @@ export function initGlobe(canvas) {
         return null;
     }
 }
+

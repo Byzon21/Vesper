@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="Vesper — Suivez vos dépenses personnelles et de couple, gérez 110+ devises, avec une sécurité de niveau bancaire.">
-    <meta name="theme-color" content="#022c22" id="theme-color-meta">
+    <meta name="theme-color" content="#0a2540" id="theme-color-meta">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <title>Vesper — Vos finances personnelles et de couple, en toute sérénité</title>
 
     {{-- Thème + classe .js posés tôt (anti-flash) --}}
@@ -25,7 +26,7 @@
 <body class="min-h-screen bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
 
     {{-- ===== Navigation ===== --}}
-    <header class="sticky top-0 z-50 border-b border-white/10 bg-emerald-950/80 text-white shadow-lg shadow-emerald-950/20 backdrop-blur-md">
+    <header class="sticky top-0 z-50 border-b border-white/10 bg-[#0a2540]/80 text-white shadow-lg shadow-[#0a2540]/20 backdrop-blur-md">
         <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
             <a href="{{ route('landing') }}" class="group flex shrink-0 items-center gap-2.5">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg shadow-emerald-500/40 transition-transform duration-300 group-hover:rotate-6">
@@ -53,19 +54,19 @@
     </header>
 
     {{-- ===== Héros : globe en vedette ===== --}}
-    <section class="relative overflow-hidden bg-emerald-950">
-        <div class="absolute inset-0 bg-gradient-to-b from-emerald-950 via-emerald-900 to-slate-950"></div>
-        <div class="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-emerald-500/25 blur-3xl"></div>
-        <div class="absolute -right-24 top-1/3 h-96 w-96 rounded-full bg-amber-500/15 blur-3xl"></div>
+    <section class="relative overflow-hidden bg-[#0a2540]">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0a2540] via-[#0c2d4a] to-slate-950"></div>
+        <div class="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-brand-blue/25 blur-3xl"></div>
+        <div class="absolute -right-24 top-1/3 h-96 w-96 rounded-full bg-brand-pink/20 blur-3xl"></div>
 
         <div class="relative mx-auto max-w-6xl px-4 pb-16 pt-14 text-center text-white sm:px-6 sm:pb-20 sm:pt-16">
             <div class="animate-fade-in inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide backdrop-blur">
-                <x-icon name="sparkles" class="h-4 w-4 text-amber-300" />
+                <x-icon name="sparkles" class="h-4 w-4 text-brand-amber" />
                 La gestion financière nouvelle génération
             </div>
 
             <h1 class="animate-fade-in-up mx-auto mt-6 max-w-4xl text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
-                Vos finances, <span class="bg-gradient-to-r from-amber-300 via-amber-400 to-emerald-300 bg-clip-text text-transparent">sans frontières</span>
+                Vos finances, <span class="bg-gradient-to-r from-brand-amber to-brand-pink bg-clip-text text-transparent">sans frontières</span>
             </h1>
 
             <p class="animate-fade-in-up delay-100 mx-auto mt-5 max-w-2xl text-lg text-emerald-50/90 sm:text-xl">
@@ -96,10 +97,10 @@
                 </a>
             </div>
 
-            <div class="animate-fade-in-up delay-300 mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-emerald-100/80">
-                <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-emerald-300" /> 7 jours offerts</span>
-                <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-emerald-300" /> Sans carte bancaire</span>
-                <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-emerald-300" /> Annulable à tout moment</span>
+            <div class="animate-fade-in-up delay-300 mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/80">
+                <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-brand-amber" /> 7 jours offerts</span>
+                <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-brand-amber" /> Sans carte bancaire</span>
+                <span class="inline-flex items-center gap-1.5"><x-icon name="check" class="h-4 w-4 text-brand-amber" /> Annulable à tout moment</span>
             </div>
         </div>
     </section>
@@ -114,7 +115,7 @@
                 ['100%', 'Données privées'],
             ] as $stat)
                 <div class="text-center">
-                    <p class="text-3xl font-extrabold tracking-tight text-emerald-700 dark:text-emerald-400">{{ $stat[0] }}</p>
+                    <p class="text-3xl font-extrabold tracking-tight text-brand-green dark:text-emerald-400">{{ $stat[0] }}</p>
                     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ $stat[1] }}</p>
                 </div>
             @endforeach
@@ -124,7 +125,7 @@
     {{-- ===== Storytelling : problème → solution ===== --}}
     <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <div data-reveal class="mx-auto max-w-3xl text-center">
-            <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Pourquoi Vesper ?</p>
+            <p class="text-sm font-bold uppercase tracking-widest text-brand-green">Pourquoi Vesper ?</p>
             <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">En avez-vous assez de vous demander où part votre argent ?</h2>
             <p class="mt-5 text-lg text-slate-500 dark:text-slate-400">
                 Chaque mois, c'est la même histoire : vous travaillez dur, l'argent rentre… puis disparaît.
@@ -141,7 +142,7 @@
                 <p class="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">À la fin du mois, impossible de dire où sont passés vos revenus. Sans suivi, chaque petite dépense finit par peser lourd.</p>
             </div>
             <div data-reveal class="card">
-                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-300">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-brand-amber">
                     <x-icon name="users" class="h-6 w-6" />
                 </div>
                 <h3 class="mt-5 text-lg font-bold">À deux, c'est flou</h3>
@@ -158,7 +159,7 @@
 
         <div data-reveal class="mx-auto mt-12 max-w-2xl text-center">
             <p class="text-lg text-slate-600 dark:text-slate-300">
-                <strong class="text-emerald-700 dark:text-emerald-400">Vesper transforme ce chaos en clarté.</strong>
+                <strong class="text-brand-green dark:text-emerald-400">Vesper transforme ce chaos en clarté.</strong>
                 En quelques secondes par jour, vous savez exactement où va chaque franc, dollar ou euro — seul ou à deux.
             </p>
         </div>
@@ -167,7 +168,7 @@
     {{-- ===== Fonctionnalités ===== --}}
     <section id="fonctionnalites" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-20 sm:px-6 sm:py-28">
         <div data-reveal class="mx-auto max-w-2xl text-center">
-            <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Fonctionnalités</p>
+            <p class="text-sm font-bold uppercase tracking-widest text-brand-green">Fonctionnalités</p>
             <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Tout ce qu'il faut pour maîtriser votre budget</h2>
             <p class="mt-4 text-lg text-slate-500 dark:text-slate-400">Des outils pensés pour les particuliers, les couples et la diaspora.</p>
         </div>
@@ -199,7 +200,7 @@
     <section id="confidentialite" class="scroll-mt-24 border-y border-slate-200 bg-white py-20 dark:border-slate-800 dark:bg-slate-900 sm:py-28">
         <div class="mx-auto max-w-6xl px-4 sm:px-6">
             <div data-reveal class="mx-auto max-w-2xl text-center">
-                <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Confidentialité</p>
+                <p class="text-sm font-bold uppercase tracking-widest text-brand-green">Confidentialité</p>
                 <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Vos données sont entre de bonnes mains</h2>
                 <p class="mt-4 text-lg text-slate-500 dark:text-slate-400">
                     Nous savons à quel point vos finances sont personnelles. C'est pourquoi la protection de vos
@@ -218,7 +219,7 @@
                 @endphp
                 @foreach ($trust as $t)
                     <div data-reveal class="rounded-2xl border border-slate-200 bg-slate-50 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-800/60">
-                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
+                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-brand-green dark:bg-emerald-500/20 dark:text-emerald-400">
                             <x-icon name="{{ $t[0] }}" class="h-6 w-6" />
                         </div>
                         <h3 class="mt-4 font-bold">{{ $t[1] }}</h3>
@@ -230,7 +231,7 @@
     </section>
 
     {{-- ===== Section couple (photo) ===== --}}
-    <section class="relative overflow-hidden bg-emerald-950 py-20 text-white sm:py-28">
+    <section class="relative overflow-hidden bg-[#0a2540] py-20 text-white sm:py-28">
         <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl"></div>
         <div class="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl"></div>
 
@@ -254,7 +255,7 @@
             </div>
 
             <div data-reveal>
-                <p class="text-sm font-bold uppercase tracking-widest text-amber-300">Pensé pour les couples</p>
+                <p class="text-sm font-bold uppercase tracking-widest text-brand-amber">Pensé pour les couples</p>
                 <h2 class="mt-3 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">Un seul foyer, une vision claire</h2>
                 <p class="mt-4 text-lg text-emerald-100/80">
                     Gérez vos finances à deux en toute transparence, sans perdre votre intimité. Le mode couple
@@ -281,7 +282,7 @@
     {{-- ===== Comment ça marche ===== --}}
     <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <div data-reveal class="mx-auto max-w-2xl text-center">
-            <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Comment ça marche</p>
+            <p class="text-sm font-bold uppercase tracking-widest text-brand-green">Comment ça marche</p>
             <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">En route en moins de 2 minutes</h2>
         </div>
 
@@ -306,7 +307,7 @@
     {{-- ===== FAQ ===== --}}
     <section id="faq" class="mx-auto max-w-3xl scroll-mt-24 px-4 py-20 sm:px-6 sm:py-28">
         <div data-reveal class="text-center">
-            <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">FAQ</p>
+            <p class="text-sm font-bold uppercase tracking-widest text-brand-green">FAQ</p>
             <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Questions fréquentes</h2>
         </div>
 
@@ -336,7 +337,7 @@
     {{-- ===== Appel à l'action final ===== --}}
     <section id="tarifs" class="relative scroll-mt-24 overflow-hidden">
         <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1920&auto=format&fit=crop')"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-900/85 to-teal-900/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0a2540]/95 via-[#0c2d4a]/85 to-teal-900/80"></div>
 
         <div class="relative mx-auto max-w-4xl px-4 py-24 text-center text-white sm:px-6 sm:py-32">
             <div data-reveal>
@@ -368,8 +369,8 @@
             </div>
             <p class="text-sm text-slate-400">© {{ date('Y') }} Vesper — Vos données restent privées, toujours.</p>
             <nav class="flex items-center gap-5 text-sm text-slate-500 dark:text-slate-400">
-                <a href="{{ route('login') }}" class="transition hover:text-emerald-600 dark:hover:text-emerald-400">Connexion</a>
-                <a href="{{ route('pricing') }}" class="transition hover:text-emerald-600 dark:hover:text-emerald-400">Tarifs</a>
+                <a href="{{ route('login') }}" class="transition hover:text-brand-green dark:hover:text-emerald-400">Connexion</a>
+                <a href="{{ route('pricing') }}" class="transition hover:text-brand-green dark:hover:text-emerald-400">Tarifs</a>
             </nav>
         </div>
     </footer>
