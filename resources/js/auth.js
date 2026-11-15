@@ -46,7 +46,21 @@ export async function signUpWithEmail() {
         return;
     }
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const failed = validatePassword(password).filter((c) => !c.ok);
+    if (failed.length > 0) {
+        if (feedback) feedback.textContent = 'Mot de passe trop faible : ' + failed.map((c) => c.label).join(', ') + '.';
+        return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            // Après clic sur le lien de confirmation, on atterrit sur /auth/callback
+            // (qui établit la session puis redirige vers le dashboard).
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+    });
 
     if (error) {
         if (feedback) feedback.textContent = error.message;
@@ -122,4 +136,46 @@ window.signInWithGoogle = signInWithGoogle;
 window.signUpWithEmail = signUpWithEmail;
 window.handleAuthCallback = handleAuthCallback;
 window.signOut = signOut;
+
+// --- Robustesse du mot de passe ---
+
+function validatePassword(password) {
+    return [
+        { key: 'length', ok: password.length >= 8, label: '8 caractères minimum' },
+        { key: 'lower', ok: /[a-z]/.test(password), label: 'une minuscule' },
+        { key: 'upper', ok: /[A-Z]/.test(password), label: 'une majuscule' },
+        { key: 'digit', ok: /[0-9]/.test(password), label: 'un chiffre' },
+        { key: 'special', ok: /[^A-Za-z0-9]/.test(password), label: 'un caractère spécial' },
+    ];
+}
+
+function updatePasswordChecks(password) {
+    const checks = validatePassword(password);
+    document.querySelectorAll('[data-password-check]').forEach((item) => {
+        const key = item.dataset.passwordCheck;
+        const ok = checks.find((c) => c.key === key)?.ok ?? false;
+        item.classList.toggle('text-brand-green', ok);
+        item.classList.toggle('text-slate-400', !ok);
+    });
+}
+
+// Affiche / masque le mot de passe (data-action="togglePassword").
+export function togglePassword(event) {
+    const btn = event.target.closest('[data-action="togglePassword"]');
+    if (!btn) return;
+    const input = document.getElementById(btn.dataset.target);
+    if (!input) return;
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.querySelectorAll('svg').forEach((icon) => icon.classList.toggle('hidden'));
+    btn.setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+    input.focus();
+}
+window.togglePassword = togglePassword;
+
+// Checklist de mot de passe en direct.
+const passwordInput = document.getElementById('signup-password');
+if (passwordInput) {
+    passwordInput.addEventListener('input', (e) => updatePasswordChecks(e.target.value));
+}
 

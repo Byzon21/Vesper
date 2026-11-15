@@ -35,7 +35,21 @@
 
             <div class="mt-6 space-y-3">
                 <input id="signup-email" type="email" placeholder="Adresse email" class="input" autocomplete="email">
-                <input id="signup-password" type="password" placeholder="Mot de passe (6+ caractères)" class="input" autocomplete="new-password">
+                <div class="relative">
+                    <input id="signup-password" type="password" placeholder="Mot de passe" class="input pr-10" autocomplete="new-password">
+                    <button type="button" data-action="togglePassword" data-target="signup-password" aria-label="Afficher le mot de passe"
+                            class="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 transition hover:text-slate-600">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <svg class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><path d="M2 2l20 20"/></svg>
+                    </button>
+                </div>
+                <ul class="space-y-1 text-xs text-slate-400">
+                    <li data-password-check="length">8 caractères minimum</li>
+                    <li data-password-check="lower">Une minuscule</li>
+                    <li data-password-check="upper">Une majuscule</li>
+                    <li data-password-check="digit">Un chiffre</li>
+                    <li data-password-check="special">Un caractère spécial</li>
+                </ul>
                 <p id="signup-feedback" class="text-sm text-red-500"></p>
 
                 <button type="button" data-action="signUpWithEmail" class="btn-primary w-full">
