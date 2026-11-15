@@ -53,12 +53,37 @@ export async function signUpWithEmail() {
         return;
     }
 
+    // Cas 1 : session immédiate (confirmation d'email désactivée côté Supabase).
     if (data.session) {
         const res = await establishServerSession(data.session.access_token);
         window.location.href = res.ok ? '/dashboard' : '/login';
-    } else if (feedback) {
-        feedback.textContent = 'Vérifiez votre boîte mail pour confirmer votre inscription (essai de 7 jours).';
+        return;
     }
+
+    // Cas 2 : confirmation d'email requise → on la confirme côté serveur
+    // (essai gratuit instantané), puis on reconnecte l'utilisateur.
+    if (data.user) {
+        const confirmRes = await fetch('/auth/confirm', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken() },
+            body: JSON.stringify({ user_id: data.user.id }),
+        });
+
+        if (confirmRes.ok) {
+            const { data: signedIn, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+            if (signInError) {
+                if (feedback) feedback.textContent = signInError.message;
+                return;
+            }
+
+            const res = await establishServerSession(signedIn.session.access_token);
+            window.location.href = res.ok ? '/dashboard' : '/login';
+            return;
+        }
+    }
+
+    if (feedback) feedback.textContent = 'Vérifiez votre boîte mail pour confirmer votre inscription (essai de 7 jours).';
 }
 
 export async function handleAuthCallback() {

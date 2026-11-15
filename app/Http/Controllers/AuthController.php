@@ -61,6 +61,27 @@ final class AuthController extends Controller
     }
 
     /**
+     * Confirme automatiquement l'email d'un utilisateur fraîchement inscrit.
+     *
+     * Inscription instantanée : quand Supabase exige une confirmation d'email,
+     * le client reçoit l'UUID de l'utilisateur (sans session). On confirme ici
+     * via l'API Admin (clé service_role) pour éviter l'envoi d'un email de
+     * confirmation (service email par défaut de Supabase limité).
+     */
+    public function confirmEmail(Request $request): JsonResponse
+    {
+        $userId = (string) $request->input('user_id', '');
+
+        if ($userId === '' || ! preg_match('/^[0-9a-f-]{36}$/i', $userId)) {
+            return response()->json(['status' => 'error'], 422);
+        }
+
+        $ok = $this->supabase->confirmUserEmail($userId);
+
+        return response()->json(['status' => $ok ? 'ok' : 'error'], $ok ? 200 : 500);
+    }
+
+    /**
      * Déconnexion : invalide la session serveur (le jeton Supabase est
      * révoqué côté client avant cet appel).
      */

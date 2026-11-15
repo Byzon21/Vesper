@@ -92,6 +92,37 @@ final class SupabaseClient
     }
 
     /**
+     * Confirme l'adresse email d'un utilisateur via l'API Admin Auth.
+     *
+     * Utilisé pour l'inscription instantanée (essai gratuit) : quand Supabase
+     * exige une confirmation d'email, `signUp()` renvoie l'utilisateur SANS
+     * session. On confirme alors l'email côté serveur (clé service_role), puis
+     * le client se reconnecte immédiatement — sans attendre un email qui, sur
+     * le service email par défaut de Supabase, n'arrive pas toujours.
+     *
+     * @param string $userId identifiant UUID Supabase de l'utilisateur
+     */
+    public function confirmUserEmail(string $userId): bool
+    {
+        $key = $this->serviceRoleKey();
+
+        try {
+            $this->http->request('PUT', rtrim($this->url, '/') . "/auth/v1/admin/users/{$userId}", [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $key,
+                    'apikey' => $key,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => ['email_confirm' => true],
+            ]);
+
+            return true;
+        } catch (GuzzleException) {
+            return false;
+        }
+    }
+
+    /**
      * @param array<string, mixed> $options
      * @return array<int|string, mixed>
      */

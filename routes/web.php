@@ -29,6 +29,7 @@ Route::get('/auth/callback', fn () => view('auth.callback'));
 // Établissement / destruction de session (Supabase JWT).
 Route::post('/auth/session', [AuthController::class, 'establishSession'])
     ->middleware(AuthenticateSupabase::class);
+Route::post('/auth/confirm', [AuthController::class, 'confirmEmail']);
 Route::post('/auth/logout', [AuthController::class, 'logout'])
     ->middleware(EnsureSupabaseSession::class);
 
