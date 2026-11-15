@@ -23,9 +23,15 @@ final class SecurityHeaders
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $response = $next($request);
-
+        // Le nonce est généré et partagé AVANT le rendu de la vue : sinon les
+        // scripts inline Blade (nonce="{{ $cspNonce }}") sont émis avec un nonce
+        // vide puis bloqués par la CSP (ex. window.handleAuthCallback() sur
+        // /auth/callback restait bloqué sur « Connexion en cours… »).
         $nonce = $this->generateNonce();
+        View::share('cspNonce', $nonce);
+        $request->attributes->set('csp_nonce', $nonce);
+
+        $response = $next($request);
 
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
@@ -47,10 +53,6 @@ final class SecurityHeaders
 
         $response->headers->set('Content-Security-Policy', $this->buildCsp($nonce));
 
-        // Partage du nonce avec la couche Vue.
-        View::share('cspNonce', $nonce);
-        $request->attributes->set('csp_nonce', $nonce);
-
         return $response;
     }
 
@@ -62,12 +64,12 @@ final class SecurityHeaders
             "object-src 'none'",
             "frame-ancestors 'none'",
             "form-action 'self'",
-            "script-src 'self' 'nonce-{$nonce}'",
+            "script-src 'self' 'nonce-{$nonce}' https://us-assets.i.posthog.com",
             // 'unsafe-inline' styles : nécessaire pour Tailwind/Livewire ; n'exécute pas de code.
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com",
             "font-src 'self' data:",
-            "connect-src 'self' https://*.supabase.co",
+            "connect-src 'self' https://*.supabase.co https://us.i.posthog.com",
             "manifest-src 'self'",
             "worker-src 'self' blob:",
             "frame-src 'none'",
