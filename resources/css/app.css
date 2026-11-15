@@ -91,6 +91,16 @@
     50% { background-position: 100% 50%; }
 }
 
+/* Devises qui apparaissent/disparaissent autour du globe */
+@keyframes currency-pop {
+    0%, 100% { opacity: 0; transform: translateY(8px) scale(0.92); }
+    12%, 88% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-currency-pop {
+    animation: currency-pop 6s ease-in-out infinite;
+}
+
 /* Révélation au scroll — activée uniquement quand JS est présent (progressive enhancement). */
 .js [data-reveal] {
     opacity: 0;
@@ -115,7 +125,8 @@
     .animate-fade-in-up,
     .animate-fade-in,
     .animate-float,
-    .animate-gradient {
+    .animate-gradient,
+    .animate-currency-pop {
         animation: none !important;
     }
 }
