@@ -65,7 +65,7 @@ final class SecurityHeaders
             "script-src 'self' 'nonce-{$nonce}'",
             // 'unsafe-inline' styles : nécessaire pour Tailwind/Livewire ; n'exécute pas de code.
             "style-src 'self' 'unsafe-inline'",
-            "img-src 'self' data: blob: https://*.supabase.co",
+            "img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com",
             "font-src 'self' data:",
             "connect-src 'self' https://*.supabase.co",
             "manifest-src 'self'",

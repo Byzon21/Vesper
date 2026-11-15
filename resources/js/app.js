@@ -41,3 +41,24 @@ document.addEventListener('click', (event) => {
     if (typeof fn === 'function') fn(event);
 });
 
+// Révélation au scroll (animations d'apparition progressive).
+// La classe .js est posée tôt par un script inline (nonce CSP) dans <head>
+// pour éviter tout flash ; ici on ne fait qu'observer les éléments [data-reveal].
+document.documentElement.classList.add('js');
+
+if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+    );
+
+    document.querySelectorAll('[data-reveal]').forEach((el) => revealObserver.observe(el));
+}
+
